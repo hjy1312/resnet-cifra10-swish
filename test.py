@@ -13,10 +13,10 @@ mu = np.array([125.306918047,122.950394141,113.865383184])
 model_def = 'deploy.prototxt'
 model_prefix = './snapshot/_iter_'
 model_postfix = '.caffemodel'
-model_index = range(100000,102000,2000)
+model_index = range(2000,102000,2000)
 best_model_index = 0
 best_acc = 0.0
-fal = 0
+acc_set = []
 #labels_filename = 'labels.txt'
 #labels = np.loadtxt(labels_filename, str, delimiter='\t')
 for index in model_index:
@@ -38,15 +38,19 @@ for index in model_index:
         if(order==y[i]):
             right = right+1
     acc = float(right)/float(x.shape[0])#very necessary, otherwise the acc will be 0
+    acc_set = acc_set + [acc]
     if(acc>best_acc):
         best_acc = acc
         best_model_index = index
 print 'the best acc is',best_acc
 print 'the best model index is',best_model_index
-
-
-
-
+acc_set = np.array(acc_set)
+model_index = np.array(model_index)
+plt.plot(model_index,acc_set)
+plt.xlabel('model')
+plt.ylabel('accuracy')
+plt.title('Tesing Accuracy')
+plt.show()
 
 
 """
