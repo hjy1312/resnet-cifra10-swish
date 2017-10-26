@@ -1,0 +1,2955 @@
+I1025 10:22:53.345479  1170 caffe.cpp:275] Use GPU with device ID 0
+I1025 10:22:53.468997  1170 caffe.cpp:279] GPU device name: Tesla K80
+I1025 10:22:53.990314  1170 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: test.prototxt
+I1025 10:22:53.990373  1170 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
+I1025 10:22:53.991794  1170 net.cpp:51] Initializing net from parameters: 
+state {
+  phase: TEST
+  level: 0
+  stage: ""
+}
+layer {
+  name: "Data1"
+  type: "Data"
+  top: "Data1"
+  top: "Data2"
+  transform_param {
+    crop_size: 32
+    mean_value: 125.306915
+    mean_value: 122.950394
+    mean_value: 113.865387
+  }
+  data_param {
+    source: "/data/hjy1312/data/RESNET/cifar-10/cifar10_test_lmdb"
+    batch_size: 128
+    backend: LMDB
+  }
+}
+layer {
+  name: "Convolution1"
+  type: "Convolution"
+  bottom: "Data1"
+  top: "Convolution1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm1"
+  type: "BatchNorm"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale1"
+  type: "Scale"
+  bottom: "Convolution1"
+  top: "Convolution1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid1"
+  type: "Sigmoid"
+  bottom: "Convolution1"
+  top: "Sigmoid1"
+}
+layer {
+  name: "Eltwise1"
+  type: "Eltwise"
+  bottom: "Convolution1"
+  bottom: "Sigmoid1"
+  top: "Eltwise1"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution2"
+  type: "Convolution"
+  bottom: "Eltwise1"
+  top: "Convolution2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm2"
+  type: "BatchNorm"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale2"
+  type: "Scale"
+  bottom: "Convolution2"
+  top: "Convolution2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid2"
+  type: "Sigmoid"
+  bottom: "Convolution2"
+  top: "Sigmoid2"
+}
+layer {
+  name: "Eltwise2"
+  type: "Eltwise"
+  bottom: "Convolution2"
+  bottom: "Sigmoid2"
+  top: "Eltwise2"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution3"
+  type: "Convolution"
+  bottom: "Eltwise2"
+  top: "Convolution3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm3"
+  type: "BatchNorm"
+  bottom: "Convolution3"
+  top: "Convolution3"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale3"
+  type: "Scale"
+  bottom: "Convolution3"
+  top: "Convolution3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise3"
+  type: "Eltwise"
+  bottom: "Convolution3"
+  bottom: "Eltwise1"
+  top: "Eltwise3"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid3"
+  type: "Sigmoid"
+  bottom: "Eltwise3"
+  top: "Sigmoid3"
+}
+layer {
+  name: "Eltwise4"
+  type: "Eltwise"
+  bottom: "Eltwise3"
+  bottom: "Sigmoid3"
+  top: "Eltwise4"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution4"
+  type: "Convolution"
+  bottom: "Eltwise4"
+  top: "Convolution4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm4"
+  type: "BatchNorm"
+  bottom: "Convolution4"
+  top: "Convolution4"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale4"
+  type: "Scale"
+  bottom: "Convolution4"
+  top: "Convolution4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid4"
+  type: "Sigmoid"
+  bottom: "Convolution4"
+  top: "Sigmoid4"
+}
+layer {
+  name: "Eltwise5"
+  type: "Eltwise"
+  bottom: "Convolution4"
+  bottom: "Sigmoid4"
+  top: "Eltwise5"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution5"
+  type: "Convolution"
+  bottom: "Eltwise5"
+  top: "Convolution5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm5"
+  type: "BatchNorm"
+  bottom: "Convolution5"
+  top: "Convolution5"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale5"
+  type: "Scale"
+  bottom: "Convolution5"
+  top: "Convolution5"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise6"
+  type: "Eltwise"
+  bottom: "Convolution5"
+  bottom: "Eltwise4"
+  top: "Eltwise6"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid5"
+  type: "Sigmoid"
+  bottom: "Eltwise6"
+  top: "Sigmoid5"
+}
+layer {
+  name: "Eltwise7"
+  type: "Eltwise"
+  bottom: "Eltwise6"
+  bottom: "Sigmoid5"
+  top: "Eltwise7"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution6"
+  type: "Convolution"
+  bottom: "Eltwise7"
+  top: "Convolution6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm6"
+  type: "BatchNorm"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale6"
+  type: "Scale"
+  bottom: "Convolution6"
+  top: "Convolution6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid6"
+  type: "Sigmoid"
+  bottom: "Convolution6"
+  top: "Sigmoid6"
+}
+layer {
+  name: "Eltwise8"
+  type: "Eltwise"
+  bottom: "Convolution6"
+  bottom: "Sigmoid6"
+  top: "Eltwise8"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution7"
+  type: "Convolution"
+  bottom: "Eltwise8"
+  top: "Convolution7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm7"
+  type: "BatchNorm"
+  bottom: "Convolution7"
+  top: "Convolution7"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale7"
+  type: "Scale"
+  bottom: "Convolution7"
+  top: "Convolution7"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise9"
+  type: "Eltwise"
+  bottom: "Convolution7"
+  bottom: "Eltwise7"
+  top: "Eltwise9"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid7"
+  type: "Sigmoid"
+  bottom: "Eltwise9"
+  top: "Sigmoid7"
+}
+layer {
+  name: "Eltwise10"
+  type: "Eltwise"
+  bottom: "Eltwise9"
+  bottom: "Sigmoid7"
+  top: "Eltwise10"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution8"
+  type: "Convolution"
+  bottom: "Eltwise10"
+  top: "Convolution8"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm8"
+  type: "BatchNorm"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale8"
+  type: "Scale"
+  bottom: "Convolution8"
+  top: "Convolution8"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid8"
+  type: "Sigmoid"
+  bottom: "Convolution8"
+  top: "Sigmoid8"
+}
+layer {
+  name: "Eltwise11"
+  type: "Eltwise"
+  bottom: "Convolution8"
+  bottom: "Sigmoid8"
+  top: "Eltwise11"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution9"
+  type: "Convolution"
+  bottom: "Eltwise11"
+  top: "Convolution9"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm9"
+  type: "BatchNorm"
+  bottom: "Convolution9"
+  top: "Convolution9"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale9"
+  type: "Scale"
+  bottom: "Convolution9"
+  top: "Convolution9"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution10"
+  type: "Convolution"
+  bottom: "Eltwise10"
+  top: "Convolution10"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm10"
+  type: "BatchNorm"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale10"
+  type: "Scale"
+  bottom: "Convolution10"
+  top: "Convolution10"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise12"
+  type: "Eltwise"
+  bottom: "Convolution9"
+  bottom: "Convolution10"
+  top: "Eltwise12"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid9"
+  type: "Sigmoid"
+  bottom: "Eltwise12"
+  top: "Sigmoid9"
+}
+layer {
+  name: "Eltwise13"
+  type: "Eltwise"
+  bottom: "Eltwise12"
+  bottom: "Sigmoid9"
+  top: "Eltwise13"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution11"
+  type: "Convolution"
+  bottom: "Eltwise13"
+  top: "Convolution11"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm11"
+  type: "BatchNorm"
+  bottom: "Convolution11"
+  top: "Convolution11"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale11"
+  type: "Scale"
+  bottom: "Convolution11"
+  top: "Convolution11"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid10"
+  type: "Sigmoid"
+  bottom: "Convolution11"
+  top: "Sigmoid10"
+}
+layer {
+  name: "Eltwise14"
+  type: "Eltwise"
+  bottom: "Convolution11"
+  bottom: "Sigmoid10"
+  top: "Eltwise14"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution12"
+  type: "Convolution"
+  bottom: "Eltwise14"
+  top: "Convolution12"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm12"
+  type: "BatchNorm"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale12"
+  type: "Scale"
+  bottom: "Convolution12"
+  top: "Convolution12"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise15"
+  type: "Eltwise"
+  bottom: "Convolution12"
+  bottom: "Eltwise13"
+  top: "Eltwise15"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid11"
+  type: "Sigmoid"
+  bottom: "Eltwise15"
+  top: "Sigmoid11"
+}
+layer {
+  name: "Eltwise16"
+  type: "Eltwise"
+  bottom: "Eltwise15"
+  bottom: "Sigmoid11"
+  top: "Eltwise16"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution13"
+  type: "Convolution"
+  bottom: "Eltwise16"
+  top: "Convolution13"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm13"
+  type: "BatchNorm"
+  bottom: "Convolution13"
+  top: "Convolution13"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale13"
+  type: "Scale"
+  bottom: "Convolution13"
+  top: "Convolution13"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid12"
+  type: "Sigmoid"
+  bottom: "Convolution13"
+  top: "Sigmoid12"
+}
+layer {
+  name: "Eltwise17"
+  type: "Eltwise"
+  bottom: "Convolution13"
+  bottom: "Sigmoid12"
+  top: "Eltwise17"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution14"
+  type: "Convolution"
+  bottom: "Eltwise17"
+  top: "Convolution14"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm14"
+  type: "BatchNorm"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale14"
+  type: "Scale"
+  bottom: "Convolution14"
+  top: "Convolution14"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise18"
+  type: "Eltwise"
+  bottom: "Convolution14"
+  bottom: "Eltwise16"
+  top: "Eltwise18"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid13"
+  type: "Sigmoid"
+  bottom: "Eltwise18"
+  top: "Sigmoid13"
+}
+layer {
+  name: "Eltwise19"
+  type: "Eltwise"
+  bottom: "Eltwise18"
+  bottom: "Sigmoid13"
+  top: "Eltwise19"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution15"
+  type: "Convolution"
+  bottom: "Eltwise19"
+  top: "Convolution15"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm15"
+  type: "BatchNorm"
+  bottom: "Convolution15"
+  top: "Convolution15"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale15"
+  type: "Scale"
+  bottom: "Convolution15"
+  top: "Convolution15"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid14"
+  type: "Sigmoid"
+  bottom: "Convolution15"
+  top: "Sigmoid14"
+}
+layer {
+  name: "Eltwise20"
+  type: "Eltwise"
+  bottom: "Convolution15"
+  bottom: "Sigmoid14"
+  top: "Eltwise20"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution16"
+  type: "Convolution"
+  bottom: "Eltwise20"
+  top: "Convolution16"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm16"
+  type: "BatchNorm"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale16"
+  type: "Scale"
+  bottom: "Convolution16"
+  top: "Convolution16"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Convolution17"
+  type: "Convolution"
+  bottom: "Eltwise19"
+  top: "Convolution17"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm17"
+  type: "BatchNorm"
+  bottom: "Convolution17"
+  top: "Convolution17"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale17"
+  type: "Scale"
+  bottom: "Convolution17"
+  top: "Convolution17"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise21"
+  type: "Eltwise"
+  bottom: "Convolution16"
+  bottom: "Convolution17"
+  top: "Eltwise21"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid15"
+  type: "Sigmoid"
+  bottom: "Eltwise21"
+  top: "Sigmoid15"
+}
+layer {
+  name: "Eltwise22"
+  type: "Eltwise"
+  bottom: "Eltwise21"
+  bottom: "Sigmoid15"
+  top: "Eltwise22"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution18"
+  type: "Convolution"
+  bottom: "Eltwise22"
+  top: "Convolution18"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm18"
+  type: "BatchNorm"
+  bottom: "Convolution18"
+  top: "Convolution18"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale18"
+  type: "Scale"
+  bottom: "Convolution18"
+  top: "Convolution18"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid16"
+  type: "Sigmoid"
+  bottom: "Convolution18"
+  top: "Sigmoid16"
+}
+layer {
+  name: "Eltwise23"
+  type: "Eltwise"
+  bottom: "Convolution18"
+  bottom: "Sigmoid16"
+  top: "Eltwise23"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution19"
+  type: "Convolution"
+  bottom: "Eltwise23"
+  top: "Convolution19"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm19"
+  type: "BatchNorm"
+  bottom: "Convolution19"
+  top: "Convolution19"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale19"
+  type: "Scale"
+  bottom: "Convolution19"
+  top: "Convolution19"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise24"
+  type: "Eltwise"
+  bottom: "Convolution19"
+  bottom: "Eltwise22"
+  top: "Eltwise24"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid17"
+  type: "Sigmoid"
+  bottom: "Eltwise24"
+  top: "Sigmoid17"
+}
+layer {
+  name: "Eltwise25"
+  type: "Eltwise"
+  bottom: "Eltwise24"
+  bottom: "Sigmoid17"
+  top: "Eltwise25"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution20"
+  type: "Convolution"
+  bottom: "Eltwise25"
+  top: "Convolution20"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm20"
+  type: "BatchNorm"
+  bottom: "Convolution20"
+  top: "Convolution20"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale20"
+  type: "Scale"
+  bottom: "Convolution20"
+  top: "Convolution20"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Sigmoid18"
+  type: "Sigmoid"
+  bottom: "Convolution20"
+  top: "Sigmoid18"
+}
+layer {
+  name: "Eltwise26"
+  type: "Eltwise"
+  bottom: "Convolution20"
+  bottom: "Sigmoid18"
+  top: "Eltwise26"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Convolution21"
+  type: "Convolution"
+  bottom: "Eltwise26"
+  top: "Convolution21"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "BatchNorm21"
+  type: "BatchNorm"
+  bottom: "Convolution21"
+  top: "Convolution21"
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "Scale21"
+  type: "Scale"
+  bottom: "Convolution21"
+  top: "Convolution21"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "Eltwise27"
+  type: "Eltwise"
+  bottom: "Convolution21"
+  bottom: "Eltwise25"
+  top: "Eltwise27"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "Sigmoid19"
+  type: "Sigmoid"
+  bottom: "Eltwise27"
+  top: "Sigmoid19"
+}
+layer {
+  name: "Eltwise28"
+  type: "Eltwise"
+  bottom: "Eltwise27"
+  bottom: "Sigmoid19"
+  top: "Eltwise28"
+  eltwise_param {
+    operation: PROD
+  }
+}
+layer {
+  name: "Pooling1"
+  type: "Pooling"
+  bottom: "Eltwise28"
+  top: "Pooling1"
+  pooling_param {
+    pool: AVE
+    global_pooling: true
+  }
+}
+layer {
+  name: "InnerProduct1"
+  type: "InnerProduct"
+  bottom: "Pooling1"
+  top: "InnerProduct1"
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "Accuracy1"
+  type: "Accuracy"
+  bottom: "InnerProduct1"
+  bottom: "Data2"
+  top: "Accuracy1"
+}
+I1025 10:22:53.992816  1170 layer_factory.hpp:77] Creating layer Data1
+I1025 10:22:53.993002  1170 db_lmdb.cpp:35] Opened lmdb /data/hjy1312/data/RESNET/cifar-10/cifar10_test_lmdb
+I1025 10:22:53.993064  1170 net.cpp:84] Creating Layer Data1
+I1025 10:22:53.993079  1170 net.cpp:380] Data1 -> Data1
+I1025 10:22:53.993119  1170 net.cpp:380] Data1 -> Data2
+I1025 10:22:54.027843  1170 data_layer.cpp:45] output data size: 128,3,32,32
+I1025 10:22:54.039516  1170 net.cpp:122] Setting up Data1
+I1025 10:22:54.039589  1170 net.cpp:129] Top shape: 128 3 32 32 (393216)
+I1025 10:22:54.039600  1170 net.cpp:129] Top shape: 128 (128)
+I1025 10:22:54.039607  1170 net.cpp:137] Memory required for data: 1573376
+I1025 10:22:54.039623  1170 layer_factory.hpp:77] Creating layer Convolution1
+I1025 10:22:54.039667  1170 net.cpp:84] Creating Layer Convolution1
+I1025 10:22:54.039680  1170 net.cpp:406] Convolution1 <- Data1
+I1025 10:22:54.039703  1170 net.cpp:380] Convolution1 -> Convolution1
+I1025 10:22:54.302876  1170 net.cpp:122] Setting up Convolution1
+I1025 10:22:54.302924  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.302932  1170 net.cpp:137] Memory required for data: 9961984
+I1025 10:22:54.302949  1170 layer_factory.hpp:77] Creating layer BatchNorm1
+I1025 10:22:54.302970  1170 net.cpp:84] Creating Layer BatchNorm1
+I1025 10:22:54.302978  1170 net.cpp:406] BatchNorm1 <- Convolution1
+I1025 10:22:54.302986  1170 net.cpp:367] BatchNorm1 -> Convolution1 (in-place)
+I1025 10:22:54.303170  1170 net.cpp:122] Setting up BatchNorm1
+I1025 10:22:54.303180  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.303185  1170 net.cpp:137] Memory required for data: 18350592
+I1025 10:22:54.303198  1170 layer_factory.hpp:77] Creating layer Scale1
+I1025 10:22:54.303210  1170 net.cpp:84] Creating Layer Scale1
+I1025 10:22:54.303215  1170 net.cpp:406] Scale1 <- Convolution1
+I1025 10:22:54.303222  1170 net.cpp:367] Scale1 -> Convolution1 (in-place)
+I1025 10:22:54.303266  1170 layer_factory.hpp:77] Creating layer Scale1
+I1025 10:22:54.303376  1170 net.cpp:122] Setting up Scale1
+I1025 10:22:54.303387  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.303392  1170 net.cpp:137] Memory required for data: 26739200
+I1025 10:22:54.303400  1170 layer_factory.hpp:77] Creating layer Convolution1_Scale1_0_split
+I1025 10:22:54.303409  1170 net.cpp:84] Creating Layer Convolution1_Scale1_0_split
+I1025 10:22:54.303414  1170 net.cpp:406] Convolution1_Scale1_0_split <- Convolution1
+I1025 10:22:54.303421  1170 net.cpp:380] Convolution1_Scale1_0_split -> Convolution1_Scale1_0_split_0
+I1025 10:22:54.303431  1170 net.cpp:380] Convolution1_Scale1_0_split -> Convolution1_Scale1_0_split_1
+I1025 10:22:54.303472  1170 net.cpp:122] Setting up Convolution1_Scale1_0_split
+I1025 10:22:54.303481  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.303488  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.303491  1170 net.cpp:137] Memory required for data: 43516416
+I1025 10:22:54.303496  1170 layer_factory.hpp:77] Creating layer Sigmoid1
+I1025 10:22:54.303504  1170 net.cpp:84] Creating Layer Sigmoid1
+I1025 10:22:54.303509  1170 net.cpp:406] Sigmoid1 <- Convolution1_Scale1_0_split_0
+I1025 10:22:54.303515  1170 net.cpp:380] Sigmoid1 -> Sigmoid1
+I1025 10:22:54.304430  1170 net.cpp:122] Setting up Sigmoid1
+I1025 10:22:54.304448  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.304455  1170 net.cpp:137] Memory required for data: 51905024
+I1025 10:22:54.304461  1170 layer_factory.hpp:77] Creating layer Eltwise1
+I1025 10:22:54.304471  1170 net.cpp:84] Creating Layer Eltwise1
+I1025 10:22:54.304476  1170 net.cpp:406] Eltwise1 <- Convolution1_Scale1_0_split_1
+I1025 10:22:54.304482  1170 net.cpp:406] Eltwise1 <- Sigmoid1
+I1025 10:22:54.304489  1170 net.cpp:380] Eltwise1 -> Eltwise1
+I1025 10:22:54.304519  1170 net.cpp:122] Setting up Eltwise1
+I1025 10:22:54.304528  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.304533  1170 net.cpp:137] Memory required for data: 60293632
+I1025 10:22:54.304538  1170 layer_factory.hpp:77] Creating layer Eltwise1_Eltwise1_0_split
+I1025 10:22:54.304554  1170 net.cpp:84] Creating Layer Eltwise1_Eltwise1_0_split
+I1025 10:22:54.304574  1170 net.cpp:406] Eltwise1_Eltwise1_0_split <- Eltwise1
+I1025 10:22:54.304580  1170 net.cpp:380] Eltwise1_Eltwise1_0_split -> Eltwise1_Eltwise1_0_split_0
+I1025 10:22:54.304589  1170 net.cpp:380] Eltwise1_Eltwise1_0_split -> Eltwise1_Eltwise1_0_split_1
+I1025 10:22:54.304625  1170 net.cpp:122] Setting up Eltwise1_Eltwise1_0_split
+I1025 10:22:54.304633  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.304639  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.304643  1170 net.cpp:137] Memory required for data: 77070848
+I1025 10:22:54.304648  1170 layer_factory.hpp:77] Creating layer Convolution2
+I1025 10:22:54.304661  1170 net.cpp:84] Creating Layer Convolution2
+I1025 10:22:54.304666  1170 net.cpp:406] Convolution2 <- Eltwise1_Eltwise1_0_split_0
+I1025 10:22:54.304674  1170 net.cpp:380] Convolution2 -> Convolution2
+I1025 10:22:54.310407  1170 net.cpp:122] Setting up Convolution2
+I1025 10:22:54.310431  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.310436  1170 net.cpp:137] Memory required for data: 85459456
+I1025 10:22:54.310449  1170 layer_factory.hpp:77] Creating layer BatchNorm2
+I1025 10:22:54.310462  1170 net.cpp:84] Creating Layer BatchNorm2
+I1025 10:22:54.310469  1170 net.cpp:406] BatchNorm2 <- Convolution2
+I1025 10:22:54.310477  1170 net.cpp:367] BatchNorm2 -> Convolution2 (in-place)
+I1025 10:22:54.310672  1170 net.cpp:122] Setting up BatchNorm2
+I1025 10:22:54.310684  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.310688  1170 net.cpp:137] Memory required for data: 93848064
+I1025 10:22:54.310698  1170 layer_factory.hpp:77] Creating layer Scale2
+I1025 10:22:54.310708  1170 net.cpp:84] Creating Layer Scale2
+I1025 10:22:54.310714  1170 net.cpp:406] Scale2 <- Convolution2
+I1025 10:22:54.310720  1170 net.cpp:367] Scale2 -> Convolution2 (in-place)
+I1025 10:22:54.310760  1170 layer_factory.hpp:77] Creating layer Scale2
+I1025 10:22:54.310876  1170 net.cpp:122] Setting up Scale2
+I1025 10:22:54.310885  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.310890  1170 net.cpp:137] Memory required for data: 102236672
+I1025 10:22:54.310897  1170 layer_factory.hpp:77] Creating layer Convolution2_Scale2_0_split
+I1025 10:22:54.310904  1170 net.cpp:84] Creating Layer Convolution2_Scale2_0_split
+I1025 10:22:54.310909  1170 net.cpp:406] Convolution2_Scale2_0_split <- Convolution2
+I1025 10:22:54.310921  1170 net.cpp:380] Convolution2_Scale2_0_split -> Convolution2_Scale2_0_split_0
+I1025 10:22:54.310930  1170 net.cpp:380] Convolution2_Scale2_0_split -> Convolution2_Scale2_0_split_1
+I1025 10:22:54.310969  1170 net.cpp:122] Setting up Convolution2_Scale2_0_split
+I1025 10:22:54.310978  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.310983  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.310987  1170 net.cpp:137] Memory required for data: 119013888
+I1025 10:22:54.310992  1170 layer_factory.hpp:77] Creating layer Sigmoid2
+I1025 10:22:54.311002  1170 net.cpp:84] Creating Layer Sigmoid2
+I1025 10:22:54.311007  1170 net.cpp:406] Sigmoid2 <- Convolution2_Scale2_0_split_0
+I1025 10:22:54.311012  1170 net.cpp:380] Sigmoid2 -> Sigmoid2
+I1025 10:22:54.311918  1170 net.cpp:122] Setting up Sigmoid2
+I1025 10:22:54.311936  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.311942  1170 net.cpp:137] Memory required for data: 127402496
+I1025 10:22:54.311947  1170 layer_factory.hpp:77] Creating layer Eltwise2
+I1025 10:22:54.311957  1170 net.cpp:84] Creating Layer Eltwise2
+I1025 10:22:54.311962  1170 net.cpp:406] Eltwise2 <- Convolution2_Scale2_0_split_1
+I1025 10:22:54.311969  1170 net.cpp:406] Eltwise2 <- Sigmoid2
+I1025 10:22:54.311975  1170 net.cpp:380] Eltwise2 -> Eltwise2
+I1025 10:22:54.312007  1170 net.cpp:122] Setting up Eltwise2
+I1025 10:22:54.312016  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.312021  1170 net.cpp:137] Memory required for data: 135791104
+I1025 10:22:54.312033  1170 layer_factory.hpp:77] Creating layer Convolution3
+I1025 10:22:54.312058  1170 net.cpp:84] Creating Layer Convolution3
+I1025 10:22:54.312063  1170 net.cpp:406] Convolution3 <- Eltwise2
+I1025 10:22:54.312075  1170 net.cpp:380] Convolution3 -> Convolution3
+I1025 10:22:54.314311  1170 net.cpp:122] Setting up Convolution3
+I1025 10:22:54.314329  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314335  1170 net.cpp:137] Memory required for data: 144179712
+I1025 10:22:54.314343  1170 layer_factory.hpp:77] Creating layer BatchNorm3
+I1025 10:22:54.314354  1170 net.cpp:84] Creating Layer BatchNorm3
+I1025 10:22:54.314360  1170 net.cpp:406] BatchNorm3 <- Convolution3
+I1025 10:22:54.314369  1170 net.cpp:367] BatchNorm3 -> Convolution3 (in-place)
+I1025 10:22:54.314561  1170 net.cpp:122] Setting up BatchNorm3
+I1025 10:22:54.314574  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314577  1170 net.cpp:137] Memory required for data: 152568320
+I1025 10:22:54.314590  1170 layer_factory.hpp:77] Creating layer Scale3
+I1025 10:22:54.314602  1170 net.cpp:84] Creating Layer Scale3
+I1025 10:22:54.314609  1170 net.cpp:406] Scale3 <- Convolution3
+I1025 10:22:54.314615  1170 net.cpp:367] Scale3 -> Convolution3 (in-place)
+I1025 10:22:54.314654  1170 layer_factory.hpp:77] Creating layer Scale3
+I1025 10:22:54.314767  1170 net.cpp:122] Setting up Scale3
+I1025 10:22:54.314777  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314781  1170 net.cpp:137] Memory required for data: 160956928
+I1025 10:22:54.314790  1170 layer_factory.hpp:77] Creating layer Eltwise3
+I1025 10:22:54.314796  1170 net.cpp:84] Creating Layer Eltwise3
+I1025 10:22:54.314801  1170 net.cpp:406] Eltwise3 <- Convolution3
+I1025 10:22:54.314807  1170 net.cpp:406] Eltwise3 <- Eltwise1_Eltwise1_0_split_1
+I1025 10:22:54.314815  1170 net.cpp:380] Eltwise3 -> Eltwise3
+I1025 10:22:54.314843  1170 net.cpp:122] Setting up Eltwise3
+I1025 10:22:54.314851  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314857  1170 net.cpp:137] Memory required for data: 169345536
+I1025 10:22:54.314860  1170 layer_factory.hpp:77] Creating layer Eltwise3_Eltwise3_0_split
+I1025 10:22:54.314867  1170 net.cpp:84] Creating Layer Eltwise3_Eltwise3_0_split
+I1025 10:22:54.314872  1170 net.cpp:406] Eltwise3_Eltwise3_0_split <- Eltwise3
+I1025 10:22:54.314878  1170 net.cpp:380] Eltwise3_Eltwise3_0_split -> Eltwise3_Eltwise3_0_split_0
+I1025 10:22:54.314889  1170 net.cpp:380] Eltwise3_Eltwise3_0_split -> Eltwise3_Eltwise3_0_split_1
+I1025 10:22:54.314924  1170 net.cpp:122] Setting up Eltwise3_Eltwise3_0_split
+I1025 10:22:54.314932  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314939  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.314942  1170 net.cpp:137] Memory required for data: 186122752
+I1025 10:22:54.314947  1170 layer_factory.hpp:77] Creating layer Sigmoid3
+I1025 10:22:54.314956  1170 net.cpp:84] Creating Layer Sigmoid3
+I1025 10:22:54.314961  1170 net.cpp:406] Sigmoid3 <- Eltwise3_Eltwise3_0_split_0
+I1025 10:22:54.314967  1170 net.cpp:380] Sigmoid3 -> Sigmoid3
+I1025 10:22:54.315168  1170 net.cpp:122] Setting up Sigmoid3
+I1025 10:22:54.315184  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.315189  1170 net.cpp:137] Memory required for data: 194511360
+I1025 10:22:54.315194  1170 layer_factory.hpp:77] Creating layer Eltwise4
+I1025 10:22:54.315202  1170 net.cpp:84] Creating Layer Eltwise4
+I1025 10:22:54.315207  1170 net.cpp:406] Eltwise4 <- Eltwise3_Eltwise3_0_split_1
+I1025 10:22:54.315213  1170 net.cpp:406] Eltwise4 <- Sigmoid3
+I1025 10:22:54.315219  1170 net.cpp:380] Eltwise4 -> Eltwise4
+I1025 10:22:54.315248  1170 net.cpp:122] Setting up Eltwise4
+I1025 10:22:54.315256  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.315261  1170 net.cpp:137] Memory required for data: 202899968
+I1025 10:22:54.315265  1170 layer_factory.hpp:77] Creating layer Eltwise4_Eltwise4_0_split
+I1025 10:22:54.315274  1170 net.cpp:84] Creating Layer Eltwise4_Eltwise4_0_split
+I1025 10:22:54.315279  1170 net.cpp:406] Eltwise4_Eltwise4_0_split <- Eltwise4
+I1025 10:22:54.315299  1170 net.cpp:380] Eltwise4_Eltwise4_0_split -> Eltwise4_Eltwise4_0_split_0
+I1025 10:22:54.315307  1170 net.cpp:380] Eltwise4_Eltwise4_0_split -> Eltwise4_Eltwise4_0_split_1
+I1025 10:22:54.315346  1170 net.cpp:122] Setting up Eltwise4_Eltwise4_0_split
+I1025 10:22:54.315356  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.315361  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.315364  1170 net.cpp:137] Memory required for data: 219677184
+I1025 10:22:54.315369  1170 layer_factory.hpp:77] Creating layer Convolution4
+I1025 10:22:54.315382  1170 net.cpp:84] Creating Layer Convolution4
+I1025 10:22:54.315387  1170 net.cpp:406] Convolution4 <- Eltwise4_Eltwise4_0_split_0
+I1025 10:22:54.315395  1170 net.cpp:380] Convolution4 -> Convolution4
+I1025 10:22:54.317636  1170 net.cpp:122] Setting up Convolution4
+I1025 10:22:54.317656  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.317662  1170 net.cpp:137] Memory required for data: 228065792
+I1025 10:22:54.317670  1170 layer_factory.hpp:77] Creating layer BatchNorm4
+I1025 10:22:54.317680  1170 net.cpp:84] Creating Layer BatchNorm4
+I1025 10:22:54.317685  1170 net.cpp:406] BatchNorm4 <- Convolution4
+I1025 10:22:54.317694  1170 net.cpp:367] BatchNorm4 -> Convolution4 (in-place)
+I1025 10:22:54.317883  1170 net.cpp:122] Setting up BatchNorm4
+I1025 10:22:54.317893  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.317898  1170 net.cpp:137] Memory required for data: 236454400
+I1025 10:22:54.317906  1170 layer_factory.hpp:77] Creating layer Scale4
+I1025 10:22:54.317915  1170 net.cpp:84] Creating Layer Scale4
+I1025 10:22:54.317920  1170 net.cpp:406] Scale4 <- Convolution4
+I1025 10:22:54.317926  1170 net.cpp:367] Scale4 -> Convolution4 (in-place)
+I1025 10:22:54.317965  1170 layer_factory.hpp:77] Creating layer Scale4
+I1025 10:22:54.318078  1170 net.cpp:122] Setting up Scale4
+I1025 10:22:54.318087  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.318091  1170 net.cpp:137] Memory required for data: 244843008
+I1025 10:22:54.318099  1170 layer_factory.hpp:77] Creating layer Convolution4_Scale4_0_split
+I1025 10:22:54.318107  1170 net.cpp:84] Creating Layer Convolution4_Scale4_0_split
+I1025 10:22:54.318114  1170 net.cpp:406] Convolution4_Scale4_0_split <- Convolution4
+I1025 10:22:54.318121  1170 net.cpp:380] Convolution4_Scale4_0_split -> Convolution4_Scale4_0_split_0
+I1025 10:22:54.318130  1170 net.cpp:380] Convolution4_Scale4_0_split -> Convolution4_Scale4_0_split_1
+I1025 10:22:54.318166  1170 net.cpp:122] Setting up Convolution4_Scale4_0_split
+I1025 10:22:54.318176  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.318181  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.318186  1170 net.cpp:137] Memory required for data: 261620224
+I1025 10:22:54.318189  1170 layer_factory.hpp:77] Creating layer Sigmoid4
+I1025 10:22:54.318197  1170 net.cpp:84] Creating Layer Sigmoid4
+I1025 10:22:54.318203  1170 net.cpp:406] Sigmoid4 <- Convolution4_Scale4_0_split_0
+I1025 10:22:54.318209  1170 net.cpp:380] Sigmoid4 -> Sigmoid4
+I1025 10:22:54.319205  1170 net.cpp:122] Setting up Sigmoid4
+I1025 10:22:54.319231  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.319241  1170 net.cpp:137] Memory required for data: 270008832
+I1025 10:22:54.319249  1170 layer_factory.hpp:77] Creating layer Eltwise5
+I1025 10:22:54.319267  1170 net.cpp:84] Creating Layer Eltwise5
+I1025 10:22:54.319278  1170 net.cpp:406] Eltwise5 <- Convolution4_Scale4_0_split_1
+I1025 10:22:54.319288  1170 net.cpp:406] Eltwise5 <- Sigmoid4
+I1025 10:22:54.319299  1170 net.cpp:380] Eltwise5 -> Eltwise5
+I1025 10:22:54.319344  1170 net.cpp:122] Setting up Eltwise5
+I1025 10:22:54.319357  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.319365  1170 net.cpp:137] Memory required for data: 278397440
+I1025 10:22:54.319373  1170 layer_factory.hpp:77] Creating layer Convolution5
+I1025 10:22:54.319392  1170 net.cpp:84] Creating Layer Convolution5
+I1025 10:22:54.319409  1170 net.cpp:406] Convolution5 <- Eltwise5
+I1025 10:22:54.319437  1170 net.cpp:380] Convolution5 -> Convolution5
+I1025 10:22:54.321702  1170 net.cpp:122] Setting up Convolution5
+I1025 10:22:54.321727  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.321736  1170 net.cpp:137] Memory required for data: 286786048
+I1025 10:22:54.321750  1170 layer_factory.hpp:77] Creating layer BatchNorm5
+I1025 10:22:54.321766  1170 net.cpp:84] Creating Layer BatchNorm5
+I1025 10:22:54.321776  1170 net.cpp:406] BatchNorm5 <- Convolution5
+I1025 10:22:54.321791  1170 net.cpp:367] BatchNorm5 -> Convolution5 (in-place)
+I1025 10:22:54.322070  1170 net.cpp:122] Setting up BatchNorm5
+I1025 10:22:54.322088  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.322094  1170 net.cpp:137] Memory required for data: 295174656
+I1025 10:22:54.322118  1170 layer_factory.hpp:77] Creating layer Scale5
+I1025 10:22:54.322132  1170 net.cpp:84] Creating Layer Scale5
+I1025 10:22:54.322141  1170 net.cpp:406] Scale5 <- Convolution5
+I1025 10:22:54.322154  1170 net.cpp:367] Scale5 -> Convolution5 (in-place)
+I1025 10:22:54.322218  1170 layer_factory.hpp:77] Creating layer Scale5
+I1025 10:22:54.322378  1170 net.cpp:122] Setting up Scale5
+I1025 10:22:54.322391  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.322396  1170 net.cpp:137] Memory required for data: 303563264
+I1025 10:22:54.322404  1170 layer_factory.hpp:77] Creating layer Eltwise6
+I1025 10:22:54.322412  1170 net.cpp:84] Creating Layer Eltwise6
+I1025 10:22:54.322417  1170 net.cpp:406] Eltwise6 <- Convolution5
+I1025 10:22:54.322425  1170 net.cpp:406] Eltwise6 <- Eltwise4_Eltwise4_0_split_1
+I1025 10:22:54.322432  1170 net.cpp:380] Eltwise6 -> Eltwise6
+I1025 10:22:54.322460  1170 net.cpp:122] Setting up Eltwise6
+I1025 10:22:54.322469  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.322474  1170 net.cpp:137] Memory required for data: 311951872
+I1025 10:22:54.322479  1170 layer_factory.hpp:77] Creating layer Eltwise6_Eltwise6_0_split
+I1025 10:22:54.322487  1170 net.cpp:84] Creating Layer Eltwise6_Eltwise6_0_split
+I1025 10:22:54.322494  1170 net.cpp:406] Eltwise6_Eltwise6_0_split <- Eltwise6
+I1025 10:22:54.322510  1170 net.cpp:380] Eltwise6_Eltwise6_0_split -> Eltwise6_Eltwise6_0_split_0
+I1025 10:22:54.322518  1170 net.cpp:380] Eltwise6_Eltwise6_0_split -> Eltwise6_Eltwise6_0_split_1
+I1025 10:22:54.322554  1170 net.cpp:122] Setting up Eltwise6_Eltwise6_0_split
+I1025 10:22:54.322562  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.322568  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.322572  1170 net.cpp:137] Memory required for data: 328729088
+I1025 10:22:54.322577  1170 layer_factory.hpp:77] Creating layer Sigmoid5
+I1025 10:22:54.322587  1170 net.cpp:84] Creating Layer Sigmoid5
+I1025 10:22:54.322592  1170 net.cpp:406] Sigmoid5 <- Eltwise6_Eltwise6_0_split_0
+I1025 10:22:54.322598  1170 net.cpp:380] Sigmoid5 -> Sigmoid5
+I1025 10:22:54.323494  1170 net.cpp:122] Setting up Sigmoid5
+I1025 10:22:54.323511  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.323518  1170 net.cpp:137] Memory required for data: 337117696
+I1025 10:22:54.323523  1170 layer_factory.hpp:77] Creating layer Eltwise7
+I1025 10:22:54.323532  1170 net.cpp:84] Creating Layer Eltwise7
+I1025 10:22:54.323537  1170 net.cpp:406] Eltwise7 <- Eltwise6_Eltwise6_0_split_1
+I1025 10:22:54.323544  1170 net.cpp:406] Eltwise7 <- Sigmoid5
+I1025 10:22:54.323552  1170 net.cpp:380] Eltwise7 -> Eltwise7
+I1025 10:22:54.323583  1170 net.cpp:122] Setting up Eltwise7
+I1025 10:22:54.323596  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.323599  1170 net.cpp:137] Memory required for data: 345506304
+I1025 10:22:54.323604  1170 layer_factory.hpp:77] Creating layer Eltwise7_Eltwise7_0_split
+I1025 10:22:54.323611  1170 net.cpp:84] Creating Layer Eltwise7_Eltwise7_0_split
+I1025 10:22:54.323616  1170 net.cpp:406] Eltwise7_Eltwise7_0_split <- Eltwise7
+I1025 10:22:54.323624  1170 net.cpp:380] Eltwise7_Eltwise7_0_split -> Eltwise7_Eltwise7_0_split_0
+I1025 10:22:54.323638  1170 net.cpp:380] Eltwise7_Eltwise7_0_split -> Eltwise7_Eltwise7_0_split_1
+I1025 10:22:54.323684  1170 net.cpp:122] Setting up Eltwise7_Eltwise7_0_split
+I1025 10:22:54.323693  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.323698  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.323704  1170 net.cpp:137] Memory required for data: 362283520
+I1025 10:22:54.323707  1170 layer_factory.hpp:77] Creating layer Convolution6
+I1025 10:22:54.323719  1170 net.cpp:84] Creating Layer Convolution6
+I1025 10:22:54.323725  1170 net.cpp:406] Convolution6 <- Eltwise7_Eltwise7_0_split_0
+I1025 10:22:54.323734  1170 net.cpp:380] Convolution6 -> Convolution6
+I1025 10:22:54.325980  1170 net.cpp:122] Setting up Convolution6
+I1025 10:22:54.325999  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326004  1170 net.cpp:137] Memory required for data: 370672128
+I1025 10:22:54.326014  1170 layer_factory.hpp:77] Creating layer BatchNorm6
+I1025 10:22:54.326025  1170 net.cpp:84] Creating Layer BatchNorm6
+I1025 10:22:54.326030  1170 net.cpp:406] BatchNorm6 <- Convolution6
+I1025 10:22:54.326037  1170 net.cpp:367] BatchNorm6 -> Convolution6 (in-place)
+I1025 10:22:54.326232  1170 net.cpp:122] Setting up BatchNorm6
+I1025 10:22:54.326242  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326247  1170 net.cpp:137] Memory required for data: 379060736
+I1025 10:22:54.326256  1170 layer_factory.hpp:77] Creating layer Scale6
+I1025 10:22:54.326264  1170 net.cpp:84] Creating Layer Scale6
+I1025 10:22:54.326269  1170 net.cpp:406] Scale6 <- Convolution6
+I1025 10:22:54.326275  1170 net.cpp:367] Scale6 -> Convolution6 (in-place)
+I1025 10:22:54.326315  1170 layer_factory.hpp:77] Creating layer Scale6
+I1025 10:22:54.326431  1170 net.cpp:122] Setting up Scale6
+I1025 10:22:54.326442  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326445  1170 net.cpp:137] Memory required for data: 387449344
+I1025 10:22:54.326452  1170 layer_factory.hpp:77] Creating layer Convolution6_Scale6_0_split
+I1025 10:22:54.326462  1170 net.cpp:84] Creating Layer Convolution6_Scale6_0_split
+I1025 10:22:54.326467  1170 net.cpp:406] Convolution6_Scale6_0_split <- Convolution6
+I1025 10:22:54.326473  1170 net.cpp:380] Convolution6_Scale6_0_split -> Convolution6_Scale6_0_split_0
+I1025 10:22:54.326481  1170 net.cpp:380] Convolution6_Scale6_0_split -> Convolution6_Scale6_0_split_1
+I1025 10:22:54.326529  1170 net.cpp:122] Setting up Convolution6_Scale6_0_split
+I1025 10:22:54.326539  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326545  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326550  1170 net.cpp:137] Memory required for data: 404226560
+I1025 10:22:54.326555  1170 layer_factory.hpp:77] Creating layer Sigmoid6
+I1025 10:22:54.326561  1170 net.cpp:84] Creating Layer Sigmoid6
+I1025 10:22:54.326566  1170 net.cpp:406] Sigmoid6 <- Convolution6_Scale6_0_split_0
+I1025 10:22:54.326575  1170 net.cpp:380] Sigmoid6 -> Sigmoid6
+I1025 10:22:54.326848  1170 net.cpp:122] Setting up Sigmoid6
+I1025 10:22:54.326871  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.326884  1170 net.cpp:137] Memory required for data: 412615168
+I1025 10:22:54.326894  1170 layer_factory.hpp:77] Creating layer Eltwise8
+I1025 10:22:54.326905  1170 net.cpp:84] Creating Layer Eltwise8
+I1025 10:22:54.326915  1170 net.cpp:406] Eltwise8 <- Convolution6_Scale6_0_split_1
+I1025 10:22:54.326925  1170 net.cpp:406] Eltwise8 <- Sigmoid6
+I1025 10:22:54.326938  1170 net.cpp:380] Eltwise8 -> Eltwise8
+I1025 10:22:54.326987  1170 net.cpp:122] Setting up Eltwise8
+I1025 10:22:54.327000  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.327004  1170 net.cpp:137] Memory required for data: 421003776
+I1025 10:22:54.327009  1170 layer_factory.hpp:77] Creating layer Convolution7
+I1025 10:22:54.327023  1170 net.cpp:84] Creating Layer Convolution7
+I1025 10:22:54.327028  1170 net.cpp:406] Convolution7 <- Eltwise8
+I1025 10:22:54.327036  1170 net.cpp:380] Convolution7 -> Convolution7
+I1025 10:22:54.329583  1170 net.cpp:122] Setting up Convolution7
+I1025 10:22:54.329613  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.329620  1170 net.cpp:137] Memory required for data: 429392384
+I1025 10:22:54.329629  1170 layer_factory.hpp:77] Creating layer BatchNorm7
+I1025 10:22:54.329638  1170 net.cpp:84] Creating Layer BatchNorm7
+I1025 10:22:54.329644  1170 net.cpp:406] BatchNorm7 <- Convolution7
+I1025 10:22:54.329653  1170 net.cpp:367] BatchNorm7 -> Convolution7 (in-place)
+I1025 10:22:54.329851  1170 net.cpp:122] Setting up BatchNorm7
+I1025 10:22:54.329861  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.329866  1170 net.cpp:137] Memory required for data: 437780992
+I1025 10:22:54.329875  1170 layer_factory.hpp:77] Creating layer Scale7
+I1025 10:22:54.329883  1170 net.cpp:84] Creating Layer Scale7
+I1025 10:22:54.329888  1170 net.cpp:406] Scale7 <- Convolution7
+I1025 10:22:54.329895  1170 net.cpp:367] Scale7 -> Convolution7 (in-place)
+I1025 10:22:54.329934  1170 layer_factory.hpp:77] Creating layer Scale7
+I1025 10:22:54.330052  1170 net.cpp:122] Setting up Scale7
+I1025 10:22:54.330062  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.330068  1170 net.cpp:137] Memory required for data: 446169600
+I1025 10:22:54.330075  1170 layer_factory.hpp:77] Creating layer Eltwise9
+I1025 10:22:54.330083  1170 net.cpp:84] Creating Layer Eltwise9
+I1025 10:22:54.330088  1170 net.cpp:406] Eltwise9 <- Convolution7
+I1025 10:22:54.330094  1170 net.cpp:406] Eltwise9 <- Eltwise7_Eltwise7_0_split_1
+I1025 10:22:54.330102  1170 net.cpp:380] Eltwise9 -> Eltwise9
+I1025 10:22:54.330129  1170 net.cpp:122] Setting up Eltwise9
+I1025 10:22:54.330138  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.330142  1170 net.cpp:137] Memory required for data: 454558208
+I1025 10:22:54.330147  1170 layer_factory.hpp:77] Creating layer Eltwise9_Eltwise9_0_split
+I1025 10:22:54.330158  1170 net.cpp:84] Creating Layer Eltwise9_Eltwise9_0_split
+I1025 10:22:54.330163  1170 net.cpp:406] Eltwise9_Eltwise9_0_split <- Eltwise9
+I1025 10:22:54.330170  1170 net.cpp:380] Eltwise9_Eltwise9_0_split -> Eltwise9_Eltwise9_0_split_0
+I1025 10:22:54.330178  1170 net.cpp:380] Eltwise9_Eltwise9_0_split -> Eltwise9_Eltwise9_0_split_1
+I1025 10:22:54.330221  1170 net.cpp:122] Setting up Eltwise9_Eltwise9_0_split
+I1025 10:22:54.330230  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.330235  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.330240  1170 net.cpp:137] Memory required for data: 471335424
+I1025 10:22:54.330245  1170 layer_factory.hpp:77] Creating layer Sigmoid7
+I1025 10:22:54.330251  1170 net.cpp:84] Creating Layer Sigmoid7
+I1025 10:22:54.330256  1170 net.cpp:406] Sigmoid7 <- Eltwise9_Eltwise9_0_split_0
+I1025 10:22:54.330262  1170 net.cpp:380] Sigmoid7 -> Sigmoid7
+I1025 10:22:54.331174  1170 net.cpp:122] Setting up Sigmoid7
+I1025 10:22:54.331192  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.331198  1170 net.cpp:137] Memory required for data: 479724032
+I1025 10:22:54.331203  1170 layer_factory.hpp:77] Creating layer Eltwise10
+I1025 10:22:54.331210  1170 net.cpp:84] Creating Layer Eltwise10
+I1025 10:22:54.331217  1170 net.cpp:406] Eltwise10 <- Eltwise9_Eltwise9_0_split_1
+I1025 10:22:54.331224  1170 net.cpp:406] Eltwise10 <- Sigmoid7
+I1025 10:22:54.331231  1170 net.cpp:380] Eltwise10 -> Eltwise10
+I1025 10:22:54.331260  1170 net.cpp:122] Setting up Eltwise10
+I1025 10:22:54.331269  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.331274  1170 net.cpp:137] Memory required for data: 488112640
+I1025 10:22:54.331277  1170 layer_factory.hpp:77] Creating layer Eltwise10_Eltwise10_0_split
+I1025 10:22:54.331286  1170 net.cpp:84] Creating Layer Eltwise10_Eltwise10_0_split
+I1025 10:22:54.331291  1170 net.cpp:406] Eltwise10_Eltwise10_0_split <- Eltwise10
+I1025 10:22:54.331297  1170 net.cpp:380] Eltwise10_Eltwise10_0_split -> Eltwise10_Eltwise10_0_split_0
+I1025 10:22:54.331307  1170 net.cpp:380] Eltwise10_Eltwise10_0_split -> Eltwise10_Eltwise10_0_split_1
+I1025 10:22:54.331351  1170 net.cpp:122] Setting up Eltwise10_Eltwise10_0_split
+I1025 10:22:54.331369  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.331375  1170 net.cpp:129] Top shape: 128 16 32 32 (2097152)
+I1025 10:22:54.331380  1170 net.cpp:137] Memory required for data: 504889856
+I1025 10:22:54.331385  1170 layer_factory.hpp:77] Creating layer Convolution8
+I1025 10:22:54.331398  1170 net.cpp:84] Creating Layer Convolution8
+I1025 10:22:54.331403  1170 net.cpp:406] Convolution8 <- Eltwise10_Eltwise10_0_split_0
+I1025 10:22:54.331413  1170 net.cpp:380] Convolution8 -> Convolution8
+I1025 10:22:54.336555  1170 net.cpp:122] Setting up Convolution8
+I1025 10:22:54.336587  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.336597  1170 net.cpp:137] Memory required for data: 509084160
+I1025 10:22:54.336612  1170 layer_factory.hpp:77] Creating layer BatchNorm8
+I1025 10:22:54.336630  1170 net.cpp:84] Creating Layer BatchNorm8
+I1025 10:22:54.336642  1170 net.cpp:406] BatchNorm8 <- Convolution8
+I1025 10:22:54.336657  1170 net.cpp:367] BatchNorm8 -> Convolution8 (in-place)
+I1025 10:22:54.336979  1170 net.cpp:122] Setting up BatchNorm8
+I1025 10:22:54.336998  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.337007  1170 net.cpp:137] Memory required for data: 513278464
+I1025 10:22:54.337024  1170 layer_factory.hpp:77] Creating layer Scale8
+I1025 10:22:54.337039  1170 net.cpp:84] Creating Layer Scale8
+I1025 10:22:54.337049  1170 net.cpp:406] Scale8 <- Convolution8
+I1025 10:22:54.337061  1170 net.cpp:367] Scale8 -> Convolution8 (in-place)
+I1025 10:22:54.337118  1170 layer_factory.hpp:77] Creating layer Scale8
+I1025 10:22:54.337293  1170 net.cpp:122] Setting up Scale8
+I1025 10:22:54.337309  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.337317  1170 net.cpp:137] Memory required for data: 517472768
+I1025 10:22:54.337332  1170 layer_factory.hpp:77] Creating layer Convolution8_Scale8_0_split
+I1025 10:22:54.337343  1170 net.cpp:84] Creating Layer Convolution8_Scale8_0_split
+I1025 10:22:54.337353  1170 net.cpp:406] Convolution8_Scale8_0_split <- Convolution8
+I1025 10:22:54.337364  1170 net.cpp:380] Convolution8_Scale8_0_split -> Convolution8_Scale8_0_split_0
+I1025 10:22:54.337381  1170 net.cpp:380] Convolution8_Scale8_0_split -> Convolution8_Scale8_0_split_1
+I1025 10:22:54.337435  1170 net.cpp:122] Setting up Convolution8_Scale8_0_split
+I1025 10:22:54.337450  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.337460  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.337468  1170 net.cpp:137] Memory required for data: 525861376
+I1025 10:22:54.337477  1170 layer_factory.hpp:77] Creating layer Sigmoid8
+I1025 10:22:54.337489  1170 net.cpp:84] Creating Layer Sigmoid8
+I1025 10:22:54.337498  1170 net.cpp:406] Sigmoid8 <- Convolution8_Scale8_0_split_0
+I1025 10:22:54.337515  1170 net.cpp:380] Sigmoid8 -> Sigmoid8
+I1025 10:22:54.341599  1170 net.cpp:122] Setting up Sigmoid8
+I1025 10:22:54.341625  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.341631  1170 net.cpp:137] Memory required for data: 530055680
+I1025 10:22:54.341637  1170 layer_factory.hpp:77] Creating layer Eltwise11
+I1025 10:22:54.341646  1170 net.cpp:84] Creating Layer Eltwise11
+I1025 10:22:54.341652  1170 net.cpp:406] Eltwise11 <- Convolution8_Scale8_0_split_1
+I1025 10:22:54.341660  1170 net.cpp:406] Eltwise11 <- Sigmoid8
+I1025 10:22:54.341668  1170 net.cpp:380] Eltwise11 -> Eltwise11
+I1025 10:22:54.341701  1170 net.cpp:122] Setting up Eltwise11
+I1025 10:22:54.341711  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.341715  1170 net.cpp:137] Memory required for data: 534249984
+I1025 10:22:54.341720  1170 layer_factory.hpp:77] Creating layer Convolution9
+I1025 10:22:54.341733  1170 net.cpp:84] Creating Layer Convolution9
+I1025 10:22:54.341739  1170 net.cpp:406] Convolution9 <- Eltwise11
+I1025 10:22:54.341747  1170 net.cpp:380] Convolution9 -> Convolution9
+I1025 10:22:54.345425  1170 net.cpp:122] Setting up Convolution9
+I1025 10:22:54.345464  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.345492  1170 net.cpp:137] Memory required for data: 538444288
+I1025 10:22:54.345508  1170 layer_factory.hpp:77] Creating layer BatchNorm9
+I1025 10:22:54.345523  1170 net.cpp:84] Creating Layer BatchNorm9
+I1025 10:22:54.345533  1170 net.cpp:406] BatchNorm9 <- Convolution9
+I1025 10:22:54.345549  1170 net.cpp:367] BatchNorm9 -> Convolution9 (in-place)
+I1025 10:22:54.345844  1170 net.cpp:122] Setting up BatchNorm9
+I1025 10:22:54.345860  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.345868  1170 net.cpp:137] Memory required for data: 542638592
+I1025 10:22:54.345885  1170 layer_factory.hpp:77] Creating layer Scale9
+I1025 10:22:54.345898  1170 net.cpp:84] Creating Layer Scale9
+I1025 10:22:54.345908  1170 net.cpp:406] Scale9 <- Convolution9
+I1025 10:22:54.345919  1170 net.cpp:367] Scale9 -> Convolution9 (in-place)
+I1025 10:22:54.345980  1170 layer_factory.hpp:77] Creating layer Scale9
+I1025 10:22:54.346160  1170 net.cpp:122] Setting up Scale9
+I1025 10:22:54.346176  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.346185  1170 net.cpp:137] Memory required for data: 546832896
+I1025 10:22:54.346199  1170 layer_factory.hpp:77] Creating layer Convolution10
+I1025 10:22:54.346218  1170 net.cpp:84] Creating Layer Convolution10
+I1025 10:22:54.346230  1170 net.cpp:406] Convolution10 <- Eltwise10_Eltwise10_0_split_1
+I1025 10:22:54.346246  1170 net.cpp:380] Convolution10 -> Convolution10
+I1025 10:22:54.349113  1170 net.cpp:122] Setting up Convolution10
+I1025 10:22:54.349141  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.349153  1170 net.cpp:137] Memory required for data: 551027200
+I1025 10:22:54.349191  1170 layer_factory.hpp:77] Creating layer BatchNorm10
+I1025 10:22:54.349211  1170 net.cpp:84] Creating Layer BatchNorm10
+I1025 10:22:54.349223  1170 net.cpp:406] BatchNorm10 <- Convolution10
+I1025 10:22:54.349238  1170 net.cpp:367] BatchNorm10 -> Convolution10 (in-place)
+I1025 10:22:54.349542  1170 net.cpp:122] Setting up BatchNorm10
+I1025 10:22:54.349562  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.349571  1170 net.cpp:137] Memory required for data: 555221504
+I1025 10:22:54.349587  1170 layer_factory.hpp:77] Creating layer Scale10
+I1025 10:22:54.349607  1170 net.cpp:84] Creating Layer Scale10
+I1025 10:22:54.349617  1170 net.cpp:406] Scale10 <- Convolution10
+I1025 10:22:54.349629  1170 net.cpp:367] Scale10 -> Convolution10 (in-place)
+I1025 10:22:54.349685  1170 layer_factory.hpp:77] Creating layer Scale10
+I1025 10:22:54.349862  1170 net.cpp:122] Setting up Scale10
+I1025 10:22:54.349879  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.349886  1170 net.cpp:137] Memory required for data: 559415808
+I1025 10:22:54.349900  1170 layer_factory.hpp:77] Creating layer Eltwise12
+I1025 10:22:54.349913  1170 net.cpp:84] Creating Layer Eltwise12
+I1025 10:22:54.349923  1170 net.cpp:406] Eltwise12 <- Convolution9
+I1025 10:22:54.349933  1170 net.cpp:406] Eltwise12 <- Convolution10
+I1025 10:22:54.349947  1170 net.cpp:380] Eltwise12 -> Eltwise12
+I1025 10:22:54.349982  1170 net.cpp:122] Setting up Eltwise12
+I1025 10:22:54.349994  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350003  1170 net.cpp:137] Memory required for data: 563610112
+I1025 10:22:54.350011  1170 layer_factory.hpp:77] Creating layer Eltwise12_Eltwise12_0_split
+I1025 10:22:54.350025  1170 net.cpp:84] Creating Layer Eltwise12_Eltwise12_0_split
+I1025 10:22:54.350035  1170 net.cpp:406] Eltwise12_Eltwise12_0_split <- Eltwise12
+I1025 10:22:54.350046  1170 net.cpp:380] Eltwise12_Eltwise12_0_split -> Eltwise12_Eltwise12_0_split_0
+I1025 10:22:54.350060  1170 net.cpp:380] Eltwise12_Eltwise12_0_split -> Eltwise12_Eltwise12_0_split_1
+I1025 10:22:54.350117  1170 net.cpp:122] Setting up Eltwise12_Eltwise12_0_split
+I1025 10:22:54.350131  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350142  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350158  1170 net.cpp:137] Memory required for data: 571998720
+I1025 10:22:54.350178  1170 layer_factory.hpp:77] Creating layer Sigmoid9
+I1025 10:22:54.350203  1170 net.cpp:84] Creating Layer Sigmoid9
+I1025 10:22:54.350214  1170 net.cpp:406] Sigmoid9 <- Eltwise12_Eltwise12_0_split_0
+I1025 10:22:54.350225  1170 net.cpp:380] Sigmoid9 -> Sigmoid9
+I1025 10:22:54.350538  1170 net.cpp:122] Setting up Sigmoid9
+I1025 10:22:54.350561  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350572  1170 net.cpp:137] Memory required for data: 576193024
+I1025 10:22:54.350584  1170 layer_factory.hpp:77] Creating layer Eltwise13
+I1025 10:22:54.350599  1170 net.cpp:84] Creating Layer Eltwise13
+I1025 10:22:54.350610  1170 net.cpp:406] Eltwise13 <- Eltwise12_Eltwise12_0_split_1
+I1025 10:22:54.350622  1170 net.cpp:406] Eltwise13 <- Sigmoid9
+I1025 10:22:54.350633  1170 net.cpp:380] Eltwise13 -> Eltwise13
+I1025 10:22:54.350682  1170 net.cpp:122] Setting up Eltwise13
+I1025 10:22:54.350700  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350709  1170 net.cpp:137] Memory required for data: 580387328
+I1025 10:22:54.350718  1170 layer_factory.hpp:77] Creating layer Eltwise13_Eltwise13_0_split
+I1025 10:22:54.350733  1170 net.cpp:84] Creating Layer Eltwise13_Eltwise13_0_split
+I1025 10:22:54.350742  1170 net.cpp:406] Eltwise13_Eltwise13_0_split <- Eltwise13
+I1025 10:22:54.350754  1170 net.cpp:380] Eltwise13_Eltwise13_0_split -> Eltwise13_Eltwise13_0_split_0
+I1025 10:22:54.350769  1170 net.cpp:380] Eltwise13_Eltwise13_0_split -> Eltwise13_Eltwise13_0_split_1
+I1025 10:22:54.350831  1170 net.cpp:122] Setting up Eltwise13_Eltwise13_0_split
+I1025 10:22:54.350845  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350857  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.350864  1170 net.cpp:137] Memory required for data: 588775936
+I1025 10:22:54.350873  1170 layer_factory.hpp:77] Creating layer Convolution11
+I1025 10:22:54.350893  1170 net.cpp:84] Creating Layer Convolution11
+I1025 10:22:54.350903  1170 net.cpp:406] Convolution11 <- Eltwise13_Eltwise13_0_split_0
+I1025 10:22:54.350919  1170 net.cpp:380] Convolution11 -> Convolution11
+I1025 10:22:54.354171  1170 net.cpp:122] Setting up Convolution11
+I1025 10:22:54.354197  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.354205  1170 net.cpp:137] Memory required for data: 592970240
+I1025 10:22:54.354220  1170 layer_factory.hpp:77] Creating layer BatchNorm11
+I1025 10:22:54.354238  1170 net.cpp:84] Creating Layer BatchNorm11
+I1025 10:22:54.354249  1170 net.cpp:406] BatchNorm11 <- Convolution11
+I1025 10:22:54.354264  1170 net.cpp:367] BatchNorm11 -> Convolution11 (in-place)
+I1025 10:22:54.354604  1170 net.cpp:122] Setting up BatchNorm11
+I1025 10:22:54.354624  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.354634  1170 net.cpp:137] Memory required for data: 597164544
+I1025 10:22:54.354650  1170 layer_factory.hpp:77] Creating layer Scale11
+I1025 10:22:54.354663  1170 net.cpp:84] Creating Layer Scale11
+I1025 10:22:54.354673  1170 net.cpp:406] Scale11 <- Convolution11
+I1025 10:22:54.354688  1170 net.cpp:367] Scale11 -> Convolution11 (in-place)
+I1025 10:22:54.354748  1170 layer_factory.hpp:77] Creating layer Scale11
+I1025 10:22:54.354926  1170 net.cpp:122] Setting up Scale11
+I1025 10:22:54.354944  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.354954  1170 net.cpp:137] Memory required for data: 601358848
+I1025 10:22:54.354967  1170 layer_factory.hpp:77] Creating layer Convolution11_Scale11_0_split
+I1025 10:22:54.354979  1170 net.cpp:84] Creating Layer Convolution11_Scale11_0_split
+I1025 10:22:54.354988  1170 net.cpp:406] Convolution11_Scale11_0_split <- Convolution11
+I1025 10:22:54.355000  1170 net.cpp:380] Convolution11_Scale11_0_split -> Convolution11_Scale11_0_split_0
+I1025 10:22:54.355015  1170 net.cpp:380] Convolution11_Scale11_0_split -> Convolution11_Scale11_0_split_1
+I1025 10:22:54.355080  1170 net.cpp:122] Setting up Convolution11_Scale11_0_split
+I1025 10:22:54.355095  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.355113  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.355132  1170 net.cpp:137] Memory required for data: 609747456
+I1025 10:22:54.355141  1170 layer_factory.hpp:77] Creating layer Sigmoid10
+I1025 10:22:54.355156  1170 net.cpp:84] Creating Layer Sigmoid10
+I1025 10:22:54.355166  1170 net.cpp:406] Sigmoid10 <- Convolution11_Scale11_0_split_0
+I1025 10:22:54.355178  1170 net.cpp:380] Sigmoid10 -> Sigmoid10
+I1025 10:22:54.355480  1170 net.cpp:122] Setting up Sigmoid10
+I1025 10:22:54.355500  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.355509  1170 net.cpp:137] Memory required for data: 613941760
+I1025 10:22:54.355518  1170 layer_factory.hpp:77] Creating layer Eltwise14
+I1025 10:22:54.355531  1170 net.cpp:84] Creating Layer Eltwise14
+I1025 10:22:54.355540  1170 net.cpp:406] Eltwise14 <- Convolution11_Scale11_0_split_1
+I1025 10:22:54.355551  1170 net.cpp:406] Eltwise14 <- Sigmoid10
+I1025 10:22:54.355563  1170 net.cpp:380] Eltwise14 -> Eltwise14
+I1025 10:22:54.355607  1170 net.cpp:122] Setting up Eltwise14
+I1025 10:22:54.355620  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.355629  1170 net.cpp:137] Memory required for data: 618136064
+I1025 10:22:54.355638  1170 layer_factory.hpp:77] Creating layer Convolution12
+I1025 10:22:54.355656  1170 net.cpp:84] Creating Layer Convolution12
+I1025 10:22:54.355666  1170 net.cpp:406] Convolution12 <- Eltwise14
+I1025 10:22:54.355681  1170 net.cpp:380] Convolution12 -> Convolution12
+I1025 10:22:54.358978  1170 net.cpp:122] Setting up Convolution12
+I1025 10:22:54.359006  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.359017  1170 net.cpp:137] Memory required for data: 622330368
+I1025 10:22:54.359032  1170 layer_factory.hpp:77] Creating layer BatchNorm12
+I1025 10:22:54.359047  1170 net.cpp:84] Creating Layer BatchNorm12
+I1025 10:22:54.359057  1170 net.cpp:406] BatchNorm12 <- Convolution12
+I1025 10:22:54.359073  1170 net.cpp:367] BatchNorm12 -> Convolution12 (in-place)
+I1025 10:22:54.359377  1170 net.cpp:122] Setting up BatchNorm12
+I1025 10:22:54.359395  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.359403  1170 net.cpp:137] Memory required for data: 626524672
+I1025 10:22:54.359419  1170 layer_factory.hpp:77] Creating layer Scale12
+I1025 10:22:54.359432  1170 net.cpp:84] Creating Layer Scale12
+I1025 10:22:54.359442  1170 net.cpp:406] Scale12 <- Convolution12
+I1025 10:22:54.359454  1170 net.cpp:367] Scale12 -> Convolution12 (in-place)
+I1025 10:22:54.359513  1170 layer_factory.hpp:77] Creating layer Scale12
+I1025 10:22:54.359694  1170 net.cpp:122] Setting up Scale12
+I1025 10:22:54.359709  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.359717  1170 net.cpp:137] Memory required for data: 630718976
+I1025 10:22:54.359731  1170 layer_factory.hpp:77] Creating layer Eltwise15
+I1025 10:22:54.359746  1170 net.cpp:84] Creating Layer Eltwise15
+I1025 10:22:54.359756  1170 net.cpp:406] Eltwise15 <- Convolution12
+I1025 10:22:54.359766  1170 net.cpp:406] Eltwise15 <- Eltwise13_Eltwise13_0_split_1
+I1025 10:22:54.359781  1170 net.cpp:380] Eltwise15 -> Eltwise15
+I1025 10:22:54.359856  1170 net.cpp:122] Setting up Eltwise15
+I1025 10:22:54.359875  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.359884  1170 net.cpp:137] Memory required for data: 634913280
+I1025 10:22:54.359894  1170 layer_factory.hpp:77] Creating layer Eltwise15_Eltwise15_0_split
+I1025 10:22:54.359906  1170 net.cpp:84] Creating Layer Eltwise15_Eltwise15_0_split
+I1025 10:22:54.359915  1170 net.cpp:406] Eltwise15_Eltwise15_0_split <- Eltwise15
+I1025 10:22:54.359931  1170 net.cpp:380] Eltwise15_Eltwise15_0_split -> Eltwise15_Eltwise15_0_split_0
+I1025 10:22:54.359946  1170 net.cpp:380] Eltwise15_Eltwise15_0_split -> Eltwise15_Eltwise15_0_split_1
+I1025 10:22:54.360013  1170 net.cpp:122] Setting up Eltwise15_Eltwise15_0_split
+I1025 10:22:54.360028  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.360039  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.360056  1170 net.cpp:137] Memory required for data: 643301888
+I1025 10:22:54.360077  1170 layer_factory.hpp:77] Creating layer Sigmoid11
+I1025 10:22:54.360095  1170 net.cpp:84] Creating Layer Sigmoid11
+I1025 10:22:54.360107  1170 net.cpp:406] Sigmoid11 <- Eltwise15_Eltwise15_0_split_0
+I1025 10:22:54.360121  1170 net.cpp:380] Sigmoid11 -> Sigmoid11
+I1025 10:22:54.361265  1170 net.cpp:122] Setting up Sigmoid11
+I1025 10:22:54.361289  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.361299  1170 net.cpp:137] Memory required for data: 647496192
+I1025 10:22:54.361308  1170 layer_factory.hpp:77] Creating layer Eltwise16
+I1025 10:22:54.361323  1170 net.cpp:84] Creating Layer Eltwise16
+I1025 10:22:54.361333  1170 net.cpp:406] Eltwise16 <- Eltwise15_Eltwise15_0_split_1
+I1025 10:22:54.361346  1170 net.cpp:406] Eltwise16 <- Sigmoid11
+I1025 10:22:54.361356  1170 net.cpp:380] Eltwise16 -> Eltwise16
+I1025 10:22:54.361407  1170 net.cpp:122] Setting up Eltwise16
+I1025 10:22:54.361425  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.361434  1170 net.cpp:137] Memory required for data: 651690496
+I1025 10:22:54.361443  1170 layer_factory.hpp:77] Creating layer Eltwise16_Eltwise16_0_split
+I1025 10:22:54.361455  1170 net.cpp:84] Creating Layer Eltwise16_Eltwise16_0_split
+I1025 10:22:54.361464  1170 net.cpp:406] Eltwise16_Eltwise16_0_split <- Eltwise16
+I1025 10:22:54.361479  1170 net.cpp:380] Eltwise16_Eltwise16_0_split -> Eltwise16_Eltwise16_0_split_0
+I1025 10:22:54.361493  1170 net.cpp:380] Eltwise16_Eltwise16_0_split -> Eltwise16_Eltwise16_0_split_1
+I1025 10:22:54.361554  1170 net.cpp:122] Setting up Eltwise16_Eltwise16_0_split
+I1025 10:22:54.361568  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.361579  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.361588  1170 net.cpp:137] Memory required for data: 660079104
+I1025 10:22:54.361596  1170 layer_factory.hpp:77] Creating layer Convolution13
+I1025 10:22:54.361618  1170 net.cpp:84] Creating Layer Convolution13
+I1025 10:22:54.361629  1170 net.cpp:406] Convolution13 <- Eltwise16_Eltwise16_0_split_0
+I1025 10:22:54.361642  1170 net.cpp:380] Convolution13 -> Convolution13
+I1025 10:22:54.368074  1170 net.cpp:122] Setting up Convolution13
+I1025 10:22:54.368110  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.368120  1170 net.cpp:137] Memory required for data: 664273408
+I1025 10:22:54.368135  1170 layer_factory.hpp:77] Creating layer BatchNorm13
+I1025 10:22:54.368154  1170 net.cpp:84] Creating Layer BatchNorm13
+I1025 10:22:54.368165  1170 net.cpp:406] BatchNorm13 <- Convolution13
+I1025 10:22:54.368177  1170 net.cpp:367] BatchNorm13 -> Convolution13 (in-place)
+I1025 10:22:54.368484  1170 net.cpp:122] Setting up BatchNorm13
+I1025 10:22:54.368500  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.368510  1170 net.cpp:137] Memory required for data: 668467712
+I1025 10:22:54.368525  1170 layer_factory.hpp:77] Creating layer Scale13
+I1025 10:22:54.368541  1170 net.cpp:84] Creating Layer Scale13
+I1025 10:22:54.368551  1170 net.cpp:406] Scale13 <- Convolution13
+I1025 10:22:54.368563  1170 net.cpp:367] Scale13 -> Convolution13 (in-place)
+I1025 10:22:54.368624  1170 layer_factory.hpp:77] Creating layer Scale13
+I1025 10:22:54.368805  1170 net.cpp:122] Setting up Scale13
+I1025 10:22:54.368820  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.368829  1170 net.cpp:137] Memory required for data: 672662016
+I1025 10:22:54.368842  1170 layer_factory.hpp:77] Creating layer Convolution13_Scale13_0_split
+I1025 10:22:54.368855  1170 net.cpp:84] Creating Layer Convolution13_Scale13_0_split
+I1025 10:22:54.368865  1170 net.cpp:406] Convolution13_Scale13_0_split <- Convolution13
+I1025 10:22:54.368880  1170 net.cpp:380] Convolution13_Scale13_0_split -> Convolution13_Scale13_0_split_0
+I1025 10:22:54.368894  1170 net.cpp:380] Convolution13_Scale13_0_split -> Convolution13_Scale13_0_split_1
+I1025 10:22:54.368949  1170 net.cpp:122] Setting up Convolution13_Scale13_0_split
+I1025 10:22:54.368973  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.368999  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.369009  1170 net.cpp:137] Memory required for data: 681050624
+I1025 10:22:54.369017  1170 layer_factory.hpp:77] Creating layer Sigmoid12
+I1025 10:22:54.369032  1170 net.cpp:84] Creating Layer Sigmoid12
+I1025 10:22:54.369041  1170 net.cpp:406] Sigmoid12 <- Convolution13_Scale13_0_split_0
+I1025 10:22:54.369053  1170 net.cpp:380] Sigmoid12 -> Sigmoid12
+I1025 10:22:54.369361  1170 net.cpp:122] Setting up Sigmoid12
+I1025 10:22:54.369384  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.369392  1170 net.cpp:137] Memory required for data: 685244928
+I1025 10:22:54.369401  1170 layer_factory.hpp:77] Creating layer Eltwise17
+I1025 10:22:54.369415  1170 net.cpp:84] Creating Layer Eltwise17
+I1025 10:22:54.369426  1170 net.cpp:406] Eltwise17 <- Convolution13_Scale13_0_split_1
+I1025 10:22:54.369436  1170 net.cpp:406] Eltwise17 <- Sigmoid12
+I1025 10:22:54.369448  1170 net.cpp:380] Eltwise17 -> Eltwise17
+I1025 10:22:54.369493  1170 net.cpp:122] Setting up Eltwise17
+I1025 10:22:54.369508  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.369518  1170 net.cpp:137] Memory required for data: 689439232
+I1025 10:22:54.369525  1170 layer_factory.hpp:77] Creating layer Convolution14
+I1025 10:22:54.369544  1170 net.cpp:84] Creating Layer Convolution14
+I1025 10:22:54.369554  1170 net.cpp:406] Convolution14 <- Eltwise17
+I1025 10:22:54.369570  1170 net.cpp:380] Convolution14 -> Convolution14
+I1025 10:22:54.372930  1170 net.cpp:122] Setting up Convolution14
+I1025 10:22:54.372956  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.372965  1170 net.cpp:137] Memory required for data: 693633536
+I1025 10:22:54.372980  1170 layer_factory.hpp:77] Creating layer BatchNorm14
+I1025 10:22:54.373001  1170 net.cpp:84] Creating Layer BatchNorm14
+I1025 10:22:54.373013  1170 net.cpp:406] BatchNorm14 <- Convolution14
+I1025 10:22:54.373028  1170 net.cpp:367] BatchNorm14 -> Convolution14 (in-place)
+I1025 10:22:54.373335  1170 net.cpp:122] Setting up BatchNorm14
+I1025 10:22:54.373352  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.373360  1170 net.cpp:137] Memory required for data: 697827840
+I1025 10:22:54.373378  1170 layer_factory.hpp:77] Creating layer Scale14
+I1025 10:22:54.373390  1170 net.cpp:84] Creating Layer Scale14
+I1025 10:22:54.373399  1170 net.cpp:406] Scale14 <- Convolution14
+I1025 10:22:54.373411  1170 net.cpp:367] Scale14 -> Convolution14 (in-place)
+I1025 10:22:54.373472  1170 layer_factory.hpp:77] Creating layer Scale14
+I1025 10:22:54.373657  1170 net.cpp:122] Setting up Scale14
+I1025 10:22:54.373673  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.373682  1170 net.cpp:137] Memory required for data: 702022144
+I1025 10:22:54.373695  1170 layer_factory.hpp:77] Creating layer Eltwise18
+I1025 10:22:54.373710  1170 net.cpp:84] Creating Layer Eltwise18
+I1025 10:22:54.373720  1170 net.cpp:406] Eltwise18 <- Convolution14
+I1025 10:22:54.373731  1170 net.cpp:406] Eltwise18 <- Eltwise16_Eltwise16_0_split_1
+I1025 10:22:54.373742  1170 net.cpp:380] Eltwise18 -> Eltwise18
+I1025 10:22:54.373780  1170 net.cpp:122] Setting up Eltwise18
+I1025 10:22:54.373795  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.373803  1170 net.cpp:137] Memory required for data: 706216448
+I1025 10:22:54.373811  1170 layer_factory.hpp:77] Creating layer Eltwise18_Eltwise18_0_split
+I1025 10:22:54.373823  1170 net.cpp:84] Creating Layer Eltwise18_Eltwise18_0_split
+I1025 10:22:54.373832  1170 net.cpp:406] Eltwise18_Eltwise18_0_split <- Eltwise18
+I1025 10:22:54.373847  1170 net.cpp:380] Eltwise18_Eltwise18_0_split -> Eltwise18_Eltwise18_0_split_0
+I1025 10:22:54.373859  1170 net.cpp:380] Eltwise18_Eltwise18_0_split -> Eltwise18_Eltwise18_0_split_1
+I1025 10:22:54.373919  1170 net.cpp:122] Setting up Eltwise18_Eltwise18_0_split
+I1025 10:22:54.373931  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.373942  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.373957  1170 net.cpp:137] Memory required for data: 714605056
+I1025 10:22:54.373976  1170 layer_factory.hpp:77] Creating layer Sigmoid13
+I1025 10:22:54.373991  1170 net.cpp:84] Creating Layer Sigmoid13
+I1025 10:22:54.374001  1170 net.cpp:406] Sigmoid13 <- Eltwise18_Eltwise18_0_split_0
+I1025 10:22:54.374012  1170 net.cpp:380] Sigmoid13 -> Sigmoid13
+I1025 10:22:54.374385  1170 net.cpp:122] Setting up Sigmoid13
+I1025 10:22:54.374411  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.374421  1170 net.cpp:137] Memory required for data: 718799360
+I1025 10:22:54.374430  1170 layer_factory.hpp:77] Creating layer Eltwise19
+I1025 10:22:54.374444  1170 net.cpp:84] Creating Layer Eltwise19
+I1025 10:22:54.374454  1170 net.cpp:406] Eltwise19 <- Eltwise18_Eltwise18_0_split_1
+I1025 10:22:54.374464  1170 net.cpp:406] Eltwise19 <- Sigmoid13
+I1025 10:22:54.374476  1170 net.cpp:380] Eltwise19 -> Eltwise19
+I1025 10:22:54.374531  1170 net.cpp:122] Setting up Eltwise19
+I1025 10:22:54.374548  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.374557  1170 net.cpp:137] Memory required for data: 722993664
+I1025 10:22:54.374565  1170 layer_factory.hpp:77] Creating layer Eltwise19_Eltwise19_0_split
+I1025 10:22:54.374581  1170 net.cpp:84] Creating Layer Eltwise19_Eltwise19_0_split
+I1025 10:22:54.374591  1170 net.cpp:406] Eltwise19_Eltwise19_0_split <- Eltwise19
+I1025 10:22:54.374603  1170 net.cpp:380] Eltwise19_Eltwise19_0_split -> Eltwise19_Eltwise19_0_split_0
+I1025 10:22:54.374616  1170 net.cpp:380] Eltwise19_Eltwise19_0_split -> Eltwise19_Eltwise19_0_split_1
+I1025 10:22:54.374680  1170 net.cpp:122] Setting up Eltwise19_Eltwise19_0_split
+I1025 10:22:54.374696  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.374706  1170 net.cpp:129] Top shape: 128 32 16 16 (1048576)
+I1025 10:22:54.374714  1170 net.cpp:137] Memory required for data: 731382272
+I1025 10:22:54.374723  1170 layer_factory.hpp:77] Creating layer Convolution15
+I1025 10:22:54.374742  1170 net.cpp:84] Creating Layer Convolution15
+I1025 10:22:54.374753  1170 net.cpp:406] Convolution15 <- Eltwise19_Eltwise19_0_split_0
+I1025 10:22:54.374775  1170 net.cpp:380] Convolution15 -> Convolution15
+I1025 10:22:54.379508  1170 net.cpp:122] Setting up Convolution15
+I1025 10:22:54.379534  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.379540  1170 net.cpp:137] Memory required for data: 733479424
+I1025 10:22:54.379549  1170 layer_factory.hpp:77] Creating layer BatchNorm15
+I1025 10:22:54.379561  1170 net.cpp:84] Creating Layer BatchNorm15
+I1025 10:22:54.379567  1170 net.cpp:406] BatchNorm15 <- Convolution15
+I1025 10:22:54.379575  1170 net.cpp:367] BatchNorm15 -> Convolution15 (in-place)
+I1025 10:22:54.379789  1170 net.cpp:122] Setting up BatchNorm15
+I1025 10:22:54.379801  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.379806  1170 net.cpp:137] Memory required for data: 735576576
+I1025 10:22:54.379814  1170 layer_factory.hpp:77] Creating layer Scale15
+I1025 10:22:54.379822  1170 net.cpp:84] Creating Layer Scale15
+I1025 10:22:54.379828  1170 net.cpp:406] Scale15 <- Convolution15
+I1025 10:22:54.379834  1170 net.cpp:367] Scale15 -> Convolution15 (in-place)
+I1025 10:22:54.379880  1170 layer_factory.hpp:77] Creating layer Scale15
+I1025 10:22:54.380005  1170 net.cpp:122] Setting up Scale15
+I1025 10:22:54.380022  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.380031  1170 net.cpp:137] Memory required for data: 737673728
+I1025 10:22:54.380045  1170 layer_factory.hpp:77] Creating layer Convolution15_Scale15_0_split
+I1025 10:22:54.380064  1170 net.cpp:84] Creating Layer Convolution15_Scale15_0_split
+I1025 10:22:54.380075  1170 net.cpp:406] Convolution15_Scale15_0_split <- Convolution15
+I1025 10:22:54.380089  1170 net.cpp:380] Convolution15_Scale15_0_split -> Convolution15_Scale15_0_split_0
+I1025 10:22:54.380105  1170 net.cpp:380] Convolution15_Scale15_0_split -> Convolution15_Scale15_0_split_1
+I1025 10:22:54.380170  1170 net.cpp:122] Setting up Convolution15_Scale15_0_split
+I1025 10:22:54.380204  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.380236  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.380247  1170 net.cpp:137] Memory required for data: 741868032
+I1025 10:22:54.380257  1170 layer_factory.hpp:77] Creating layer Sigmoid14
+I1025 10:22:54.380270  1170 net.cpp:84] Creating Layer Sigmoid14
+I1025 10:22:54.380280  1170 net.cpp:406] Sigmoid14 <- Convolution15_Scale15_0_split_0
+I1025 10:22:54.380291  1170 net.cpp:380] Sigmoid14 -> Sigmoid14
+I1025 10:22:54.383319  1170 net.cpp:122] Setting up Sigmoid14
+I1025 10:22:54.383348  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.383358  1170 net.cpp:137] Memory required for data: 743965184
+I1025 10:22:54.383368  1170 layer_factory.hpp:77] Creating layer Eltwise20
+I1025 10:22:54.383381  1170 net.cpp:84] Creating Layer Eltwise20
+I1025 10:22:54.383391  1170 net.cpp:406] Eltwise20 <- Convolution15_Scale15_0_split_1
+I1025 10:22:54.383402  1170 net.cpp:406] Eltwise20 <- Sigmoid14
+I1025 10:22:54.383415  1170 net.cpp:380] Eltwise20 -> Eltwise20
+I1025 10:22:54.383464  1170 net.cpp:122] Setting up Eltwise20
+I1025 10:22:54.383479  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.383488  1170 net.cpp:137] Memory required for data: 746062336
+I1025 10:22:54.383497  1170 layer_factory.hpp:77] Creating layer Convolution16
+I1025 10:22:54.383517  1170 net.cpp:84] Creating Layer Convolution16
+I1025 10:22:54.383527  1170 net.cpp:406] Convolution16 <- Eltwise20
+I1025 10:22:54.383543  1170 net.cpp:380] Convolution16 -> Convolution16
+I1025 10:22:54.389216  1170 net.cpp:122] Setting up Convolution16
+I1025 10:22:54.389245  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.389255  1170 net.cpp:137] Memory required for data: 748159488
+I1025 10:22:54.389273  1170 layer_factory.hpp:77] Creating layer BatchNorm16
+I1025 10:22:54.389289  1170 net.cpp:84] Creating Layer BatchNorm16
+I1025 10:22:54.389300  1170 net.cpp:406] BatchNorm16 <- Convolution16
+I1025 10:22:54.389315  1170 net.cpp:367] BatchNorm16 -> Convolution16 (in-place)
+I1025 10:22:54.389645  1170 net.cpp:122] Setting up BatchNorm16
+I1025 10:22:54.389663  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.389672  1170 net.cpp:137] Memory required for data: 750256640
+I1025 10:22:54.389689  1170 layer_factory.hpp:77] Creating layer Scale16
+I1025 10:22:54.389704  1170 net.cpp:84] Creating Layer Scale16
+I1025 10:22:54.389714  1170 net.cpp:406] Scale16 <- Convolution16
+I1025 10:22:54.389726  1170 net.cpp:367] Scale16 -> Convolution16 (in-place)
+I1025 10:22:54.389791  1170 layer_factory.hpp:77] Creating layer Scale16
+I1025 10:22:54.389991  1170 net.cpp:122] Setting up Scale16
+I1025 10:22:54.390007  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.390017  1170 net.cpp:137] Memory required for data: 752353792
+I1025 10:22:54.390030  1170 layer_factory.hpp:77] Creating layer Convolution17
+I1025 10:22:54.390051  1170 net.cpp:84] Creating Layer Convolution17
+I1025 10:22:54.390064  1170 net.cpp:406] Convolution17 <- Eltwise19_Eltwise19_0_split_1
+I1025 10:22:54.390077  1170 net.cpp:380] Convolution17 -> Convolution17
+I1025 10:22:54.393252  1170 net.cpp:122] Setting up Convolution17
+I1025 10:22:54.393280  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.393290  1170 net.cpp:137] Memory required for data: 754450944
+I1025 10:22:54.393303  1170 layer_factory.hpp:77] Creating layer BatchNorm17
+I1025 10:22:54.393321  1170 net.cpp:84] Creating Layer BatchNorm17
+I1025 10:22:54.393332  1170 net.cpp:406] BatchNorm17 <- Convolution17
+I1025 10:22:54.393345  1170 net.cpp:367] BatchNorm17 -> Convolution17 (in-place)
+I1025 10:22:54.393668  1170 net.cpp:122] Setting up BatchNorm17
+I1025 10:22:54.393685  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.393694  1170 net.cpp:137] Memory required for data: 756548096
+I1025 10:22:54.393712  1170 layer_factory.hpp:77] Creating layer Scale17
+I1025 10:22:54.393726  1170 net.cpp:84] Creating Layer Scale17
+I1025 10:22:54.393736  1170 net.cpp:406] Scale17 <- Convolution17
+I1025 10:22:54.393756  1170 net.cpp:367] Scale17 -> Convolution17 (in-place)
+I1025 10:22:54.393836  1170 layer_factory.hpp:77] Creating layer Scale17
+I1025 10:22:54.394033  1170 net.cpp:122] Setting up Scale17
+I1025 10:22:54.394053  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.394064  1170 net.cpp:137] Memory required for data: 758645248
+I1025 10:22:54.394080  1170 layer_factory.hpp:77] Creating layer Eltwise21
+I1025 10:22:54.394098  1170 net.cpp:84] Creating Layer Eltwise21
+I1025 10:22:54.394109  1170 net.cpp:406] Eltwise21 <- Convolution16
+I1025 10:22:54.394121  1170 net.cpp:406] Eltwise21 <- Convolution17
+I1025 10:22:54.394137  1170 net.cpp:380] Eltwise21 -> Eltwise21
+I1025 10:22:54.394184  1170 net.cpp:122] Setting up Eltwise21
+I1025 10:22:54.394202  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.394212  1170 net.cpp:137] Memory required for data: 760742400
+I1025 10:22:54.394222  1170 layer_factory.hpp:77] Creating layer Eltwise21_Eltwise21_0_split
+I1025 10:22:54.394237  1170 net.cpp:84] Creating Layer Eltwise21_Eltwise21_0_split
+I1025 10:22:54.394248  1170 net.cpp:406] Eltwise21_Eltwise21_0_split <- Eltwise21
+I1025 10:22:54.394265  1170 net.cpp:380] Eltwise21_Eltwise21_0_split -> Eltwise21_Eltwise21_0_split_0
+I1025 10:22:54.394281  1170 net.cpp:380] Eltwise21_Eltwise21_0_split -> Eltwise21_Eltwise21_0_split_1
+I1025 10:22:54.394347  1170 net.cpp:122] Setting up Eltwise21_Eltwise21_0_split
+I1025 10:22:54.394361  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.394372  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.394381  1170 net.cpp:137] Memory required for data: 764936704
+I1025 10:22:54.394389  1170 layer_factory.hpp:77] Creating layer Sigmoid15
+I1025 10:22:54.394404  1170 net.cpp:84] Creating Layer Sigmoid15
+I1025 10:22:54.394414  1170 net.cpp:406] Sigmoid15 <- Eltwise21_Eltwise21_0_split_0
+I1025 10:22:54.394426  1170 net.cpp:380] Sigmoid15 -> Sigmoid15
+I1025 10:22:54.395552  1170 net.cpp:122] Setting up Sigmoid15
+I1025 10:22:54.395576  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.395586  1170 net.cpp:137] Memory required for data: 767033856
+I1025 10:22:54.395596  1170 layer_factory.hpp:77] Creating layer Eltwise22
+I1025 10:22:54.395614  1170 net.cpp:84] Creating Layer Eltwise22
+I1025 10:22:54.395624  1170 net.cpp:406] Eltwise22 <- Eltwise21_Eltwise21_0_split_1
+I1025 10:22:54.395637  1170 net.cpp:406] Eltwise22 <- Sigmoid15
+I1025 10:22:54.395648  1170 net.cpp:380] Eltwise22 -> Eltwise22
+I1025 10:22:54.395696  1170 net.cpp:122] Setting up Eltwise22
+I1025 10:22:54.395711  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.395720  1170 net.cpp:137] Memory required for data: 769131008
+I1025 10:22:54.395730  1170 layer_factory.hpp:77] Creating layer Eltwise22_Eltwise22_0_split
+I1025 10:22:54.395740  1170 net.cpp:84] Creating Layer Eltwise22_Eltwise22_0_split
+I1025 10:22:54.395750  1170 net.cpp:406] Eltwise22_Eltwise22_0_split <- Eltwise22
+I1025 10:22:54.395763  1170 net.cpp:380] Eltwise22_Eltwise22_0_split -> Eltwise22_Eltwise22_0_split_0
+I1025 10:22:54.395777  1170 net.cpp:380] Eltwise22_Eltwise22_0_split -> Eltwise22_Eltwise22_0_split_1
+I1025 10:22:54.395839  1170 net.cpp:122] Setting up Eltwise22_Eltwise22_0_split
+I1025 10:22:54.395853  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.395864  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.395872  1170 net.cpp:137] Memory required for data: 773325312
+I1025 10:22:54.395880  1170 layer_factory.hpp:77] Creating layer Convolution18
+I1025 10:22:54.395903  1170 net.cpp:84] Creating Layer Convolution18
+I1025 10:22:54.395915  1170 net.cpp:406] Convolution18 <- Eltwise22_Eltwise22_0_split_0
+I1025 10:22:54.395927  1170 net.cpp:380] Convolution18 -> Convolution18
+I1025 10:22:54.400549  1170 net.cpp:122] Setting up Convolution18
+I1025 10:22:54.400578  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.400588  1170 net.cpp:137] Memory required for data: 775422464
+I1025 10:22:54.400602  1170 layer_factory.hpp:77] Creating layer BatchNorm18
+I1025 10:22:54.400624  1170 net.cpp:84] Creating Layer BatchNorm18
+I1025 10:22:54.400645  1170 net.cpp:406] BatchNorm18 <- Convolution18
+I1025 10:22:54.400661  1170 net.cpp:367] BatchNorm18 -> Convolution18 (in-place)
+I1025 10:22:54.400992  1170 net.cpp:122] Setting up BatchNorm18
+I1025 10:22:54.401008  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.401017  1170 net.cpp:137] Memory required for data: 777519616
+I1025 10:22:54.401033  1170 layer_factory.hpp:77] Creating layer Scale18
+I1025 10:22:54.401047  1170 net.cpp:84] Creating Layer Scale18
+I1025 10:22:54.401057  1170 net.cpp:406] Scale18 <- Convolution18
+I1025 10:22:54.401070  1170 net.cpp:367] Scale18 -> Convolution18 (in-place)
+I1025 10:22:54.401132  1170 layer_factory.hpp:77] Creating layer Scale18
+I1025 10:22:54.401329  1170 net.cpp:122] Setting up Scale18
+I1025 10:22:54.401345  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.401353  1170 net.cpp:137] Memory required for data: 779616768
+I1025 10:22:54.401367  1170 layer_factory.hpp:77] Creating layer Convolution18_Scale18_0_split
+I1025 10:22:54.401379  1170 net.cpp:84] Creating Layer Convolution18_Scale18_0_split
+I1025 10:22:54.401388  1170 net.cpp:406] Convolution18_Scale18_0_split <- Convolution18
+I1025 10:22:54.401401  1170 net.cpp:380] Convolution18_Scale18_0_split -> Convolution18_Scale18_0_split_0
+I1025 10:22:54.401417  1170 net.cpp:380] Convolution18_Scale18_0_split -> Convolution18_Scale18_0_split_1
+I1025 10:22:54.401475  1170 net.cpp:122] Setting up Convolution18_Scale18_0_split
+I1025 10:22:54.401490  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.401500  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.401510  1170 net.cpp:137] Memory required for data: 783811072
+I1025 10:22:54.401518  1170 layer_factory.hpp:77] Creating layer Sigmoid16
+I1025 10:22:54.401530  1170 net.cpp:84] Creating Layer Sigmoid16
+I1025 10:22:54.401540  1170 net.cpp:406] Sigmoid16 <- Convolution18_Scale18_0_split_0
+I1025 10:22:54.401553  1170 net.cpp:380] Sigmoid16 -> Sigmoid16
+I1025 10:22:54.401929  1170 net.cpp:122] Setting up Sigmoid16
+I1025 10:22:54.401952  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.401960  1170 net.cpp:137] Memory required for data: 785908224
+I1025 10:22:54.401969  1170 layer_factory.hpp:77] Creating layer Eltwise23
+I1025 10:22:54.401984  1170 net.cpp:84] Creating Layer Eltwise23
+I1025 10:22:54.401994  1170 net.cpp:406] Eltwise23 <- Convolution18_Scale18_0_split_1
+I1025 10:22:54.402006  1170 net.cpp:406] Eltwise23 <- Sigmoid16
+I1025 10:22:54.402019  1170 net.cpp:380] Eltwise23 -> Eltwise23
+I1025 10:22:54.402065  1170 net.cpp:122] Setting up Eltwise23
+I1025 10:22:54.402081  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.402089  1170 net.cpp:137] Memory required for data: 788005376
+I1025 10:22:54.402097  1170 layer_factory.hpp:77] Creating layer Convolution19
+I1025 10:22:54.402117  1170 net.cpp:84] Creating Layer Convolution19
+I1025 10:22:54.402127  1170 net.cpp:406] Convolution19 <- Eltwise23
+I1025 10:22:54.402140  1170 net.cpp:380] Convolution19 -> Convolution19
+I1025 10:22:54.406771  1170 net.cpp:122] Setting up Convolution19
+I1025 10:22:54.406805  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.406814  1170 net.cpp:137] Memory required for data: 790102528
+I1025 10:22:54.406828  1170 layer_factory.hpp:77] Creating layer BatchNorm19
+I1025 10:22:54.406844  1170 net.cpp:84] Creating Layer BatchNorm19
+I1025 10:22:54.406855  1170 net.cpp:406] BatchNorm19 <- Convolution19
+I1025 10:22:54.406869  1170 net.cpp:367] BatchNorm19 -> Convolution19 (in-place)
+I1025 10:22:54.407148  1170 net.cpp:122] Setting up BatchNorm19
+I1025 10:22:54.407165  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.407169  1170 net.cpp:137] Memory required for data: 792199680
+I1025 10:22:54.407203  1170 layer_factory.hpp:77] Creating layer Scale19
+I1025 10:22:54.407215  1170 net.cpp:84] Creating Layer Scale19
+I1025 10:22:54.407222  1170 net.cpp:406] Scale19 <- Convolution19
+I1025 10:22:54.407228  1170 net.cpp:367] Scale19 -> Convolution19 (in-place)
+I1025 10:22:54.407285  1170 layer_factory.hpp:77] Creating layer Scale19
+I1025 10:22:54.407429  1170 net.cpp:122] Setting up Scale19
+I1025 10:22:54.407439  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.407444  1170 net.cpp:137] Memory required for data: 794296832
+I1025 10:22:54.407451  1170 layer_factory.hpp:77] Creating layer Eltwise24
+I1025 10:22:54.407459  1170 net.cpp:84] Creating Layer Eltwise24
+I1025 10:22:54.407465  1170 net.cpp:406] Eltwise24 <- Convolution19
+I1025 10:22:54.407472  1170 net.cpp:406] Eltwise24 <- Eltwise22_Eltwise22_0_split_1
+I1025 10:22:54.407479  1170 net.cpp:380] Eltwise24 -> Eltwise24
+I1025 10:22:54.407505  1170 net.cpp:122] Setting up Eltwise24
+I1025 10:22:54.407512  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.407517  1170 net.cpp:137] Memory required for data: 796393984
+I1025 10:22:54.407521  1170 layer_factory.hpp:77] Creating layer Eltwise24_Eltwise24_0_split
+I1025 10:22:54.407531  1170 net.cpp:84] Creating Layer Eltwise24_Eltwise24_0_split
+I1025 10:22:54.407536  1170 net.cpp:406] Eltwise24_Eltwise24_0_split <- Eltwise24
+I1025 10:22:54.407542  1170 net.cpp:380] Eltwise24_Eltwise24_0_split -> Eltwise24_Eltwise24_0_split_0
+I1025 10:22:54.407552  1170 net.cpp:380] Eltwise24_Eltwise24_0_split -> Eltwise24_Eltwise24_0_split_1
+I1025 10:22:54.407593  1170 net.cpp:122] Setting up Eltwise24_Eltwise24_0_split
+I1025 10:22:54.407603  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.407608  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.407613  1170 net.cpp:137] Memory required for data: 800588288
+I1025 10:22:54.407618  1170 layer_factory.hpp:77] Creating layer Sigmoid17
+I1025 10:22:54.407624  1170 net.cpp:84] Creating Layer Sigmoid17
+I1025 10:22:54.407629  1170 net.cpp:406] Sigmoid17 <- Eltwise24_Eltwise24_0_split_0
+I1025 10:22:54.407636  1170 net.cpp:380] Sigmoid17 -> Sigmoid17
+I1025 10:22:54.408592  1170 net.cpp:122] Setting up Sigmoid17
+I1025 10:22:54.408612  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.408617  1170 net.cpp:137] Memory required for data: 802685440
+I1025 10:22:54.408622  1170 layer_factory.hpp:77] Creating layer Eltwise25
+I1025 10:22:54.408633  1170 net.cpp:84] Creating Layer Eltwise25
+I1025 10:22:54.408639  1170 net.cpp:406] Eltwise25 <- Eltwise24_Eltwise24_0_split_1
+I1025 10:22:54.408646  1170 net.cpp:406] Eltwise25 <- Sigmoid17
+I1025 10:22:54.408653  1170 net.cpp:380] Eltwise25 -> Eltwise25
+I1025 10:22:54.408687  1170 net.cpp:122] Setting up Eltwise25
+I1025 10:22:54.408697  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.408701  1170 net.cpp:137] Memory required for data: 804782592
+I1025 10:22:54.408706  1170 layer_factory.hpp:77] Creating layer Eltwise25_Eltwise25_0_split
+I1025 10:22:54.408712  1170 net.cpp:84] Creating Layer Eltwise25_Eltwise25_0_split
+I1025 10:22:54.408717  1170 net.cpp:406] Eltwise25_Eltwise25_0_split <- Eltwise25
+I1025 10:22:54.408726  1170 net.cpp:380] Eltwise25_Eltwise25_0_split -> Eltwise25_Eltwise25_0_split_0
+I1025 10:22:54.408735  1170 net.cpp:380] Eltwise25_Eltwise25_0_split -> Eltwise25_Eltwise25_0_split_1
+I1025 10:22:54.408776  1170 net.cpp:122] Setting up Eltwise25_Eltwise25_0_split
+I1025 10:22:54.408785  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.408790  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.408794  1170 net.cpp:137] Memory required for data: 808976896
+I1025 10:22:54.408799  1170 layer_factory.hpp:77] Creating layer Convolution20
+I1025 10:22:54.408812  1170 net.cpp:84] Creating Layer Convolution20
+I1025 10:22:54.408818  1170 net.cpp:406] Convolution20 <- Eltwise25_Eltwise25_0_split_0
+I1025 10:22:54.408826  1170 net.cpp:380] Convolution20 -> Convolution20
+I1025 10:22:54.411649  1170 net.cpp:122] Setting up Convolution20
+I1025 10:22:54.411669  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.411675  1170 net.cpp:137] Memory required for data: 811074048
+I1025 10:22:54.411684  1170 layer_factory.hpp:77] Creating layer BatchNorm20
+I1025 10:22:54.411695  1170 net.cpp:84] Creating Layer BatchNorm20
+I1025 10:22:54.411706  1170 net.cpp:406] BatchNorm20 <- Convolution20
+I1025 10:22:54.411723  1170 net.cpp:367] BatchNorm20 -> Convolution20 (in-place)
+I1025 10:22:54.411957  1170 net.cpp:122] Setting up BatchNorm20
+I1025 10:22:54.411969  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.411974  1170 net.cpp:137] Memory required for data: 813171200
+I1025 10:22:54.411983  1170 layer_factory.hpp:77] Creating layer Scale20
+I1025 10:22:54.412011  1170 net.cpp:84] Creating Layer Scale20
+I1025 10:22:54.412019  1170 net.cpp:406] Scale20 <- Convolution20
+I1025 10:22:54.412025  1170 net.cpp:367] Scale20 -> Convolution20 (in-place)
+I1025 10:22:54.412073  1170 layer_factory.hpp:77] Creating layer Scale20
+I1025 10:22:54.412209  1170 net.cpp:122] Setting up Scale20
+I1025 10:22:54.412220  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.412225  1170 net.cpp:137] Memory required for data: 815268352
+I1025 10:22:54.412232  1170 layer_factory.hpp:77] Creating layer Convolution20_Scale20_0_split
+I1025 10:22:54.412240  1170 net.cpp:84] Creating Layer Convolution20_Scale20_0_split
+I1025 10:22:54.412245  1170 net.cpp:406] Convolution20_Scale20_0_split <- Convolution20
+I1025 10:22:54.412253  1170 net.cpp:380] Convolution20_Scale20_0_split -> Convolution20_Scale20_0_split_0
+I1025 10:22:54.412261  1170 net.cpp:380] Convolution20_Scale20_0_split -> Convolution20_Scale20_0_split_1
+I1025 10:22:54.412300  1170 net.cpp:122] Setting up Convolution20_Scale20_0_split
+I1025 10:22:54.412309  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.412315  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.412319  1170 net.cpp:137] Memory required for data: 819462656
+I1025 10:22:54.412324  1170 layer_factory.hpp:77] Creating layer Sigmoid18
+I1025 10:22:54.412330  1170 net.cpp:84] Creating Layer Sigmoid18
+I1025 10:22:54.412335  1170 net.cpp:406] Sigmoid18 <- Convolution20_Scale20_0_split_0
+I1025 10:22:54.412343  1170 net.cpp:380] Sigmoid18 -> Sigmoid18
+I1025 10:22:54.414778  1170 net.cpp:122] Setting up Sigmoid18
+I1025 10:22:54.414808  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.414819  1170 net.cpp:137] Memory required for data: 821559808
+I1025 10:22:54.414827  1170 layer_factory.hpp:77] Creating layer Eltwise26
+I1025 10:22:54.414840  1170 net.cpp:84] Creating Layer Eltwise26
+I1025 10:22:54.414850  1170 net.cpp:406] Eltwise26 <- Convolution20_Scale20_0_split_1
+I1025 10:22:54.414863  1170 net.cpp:406] Eltwise26 <- Sigmoid18
+I1025 10:22:54.414880  1170 net.cpp:380] Eltwise26 -> Eltwise26
+I1025 10:22:54.414934  1170 net.cpp:122] Setting up Eltwise26
+I1025 10:22:54.414958  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.414973  1170 net.cpp:137] Memory required for data: 823656960
+I1025 10:22:54.414985  1170 layer_factory.hpp:77] Creating layer Convolution21
+I1025 10:22:54.415016  1170 net.cpp:84] Creating Layer Convolution21
+I1025 10:22:54.415027  1170 net.cpp:406] Convolution21 <- Eltwise26
+I1025 10:22:54.415042  1170 net.cpp:380] Convolution21 -> Convolution21
+I1025 10:22:54.418668  1170 net.cpp:122] Setting up Convolution21
+I1025 10:22:54.418690  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.418696  1170 net.cpp:137] Memory required for data: 825754112
+I1025 10:22:54.418705  1170 layer_factory.hpp:77] Creating layer BatchNorm21
+I1025 10:22:54.418715  1170 net.cpp:84] Creating Layer BatchNorm21
+I1025 10:22:54.418721  1170 net.cpp:406] BatchNorm21 <- Convolution21
+I1025 10:22:54.418730  1170 net.cpp:367] BatchNorm21 -> Convolution21 (in-place)
+I1025 10:22:54.418954  1170 net.cpp:122] Setting up BatchNorm21
+I1025 10:22:54.418965  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.418970  1170 net.cpp:137] Memory required for data: 827851264
+I1025 10:22:54.418979  1170 layer_factory.hpp:77] Creating layer Scale21
+I1025 10:22:54.418987  1170 net.cpp:84] Creating Layer Scale21
+I1025 10:22:54.418993  1170 net.cpp:406] Scale21 <- Convolution21
+I1025 10:22:54.419003  1170 net.cpp:367] Scale21 -> Convolution21 (in-place)
+I1025 10:22:54.419056  1170 layer_factory.hpp:77] Creating layer Scale21
+I1025 10:22:54.419205  1170 net.cpp:122] Setting up Scale21
+I1025 10:22:54.419216  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419220  1170 net.cpp:137] Memory required for data: 829948416
+I1025 10:22:54.419229  1170 layer_factory.hpp:77] Creating layer Eltwise27
+I1025 10:22:54.419236  1170 net.cpp:84] Creating Layer Eltwise27
+I1025 10:22:54.419241  1170 net.cpp:406] Eltwise27 <- Convolution21
+I1025 10:22:54.419248  1170 net.cpp:406] Eltwise27 <- Eltwise25_Eltwise25_0_split_1
+I1025 10:22:54.419255  1170 net.cpp:380] Eltwise27 -> Eltwise27
+I1025 10:22:54.419282  1170 net.cpp:122] Setting up Eltwise27
+I1025 10:22:54.419291  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419296  1170 net.cpp:137] Memory required for data: 832045568
+I1025 10:22:54.419299  1170 layer_factory.hpp:77] Creating layer Eltwise27_Eltwise27_0_split
+I1025 10:22:54.419306  1170 net.cpp:84] Creating Layer Eltwise27_Eltwise27_0_split
+I1025 10:22:54.419312  1170 net.cpp:406] Eltwise27_Eltwise27_0_split <- Eltwise27
+I1025 10:22:54.419320  1170 net.cpp:380] Eltwise27_Eltwise27_0_split -> Eltwise27_Eltwise27_0_split_0
+I1025 10:22:54.419328  1170 net.cpp:380] Eltwise27_Eltwise27_0_split -> Eltwise27_Eltwise27_0_split_1
+I1025 10:22:54.419369  1170 net.cpp:122] Setting up Eltwise27_Eltwise27_0_split
+I1025 10:22:54.419378  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419384  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419389  1170 net.cpp:137] Memory required for data: 836239872
+I1025 10:22:54.419394  1170 layer_factory.hpp:77] Creating layer Sigmoid19
+I1025 10:22:54.419399  1170 net.cpp:84] Creating Layer Sigmoid19
+I1025 10:22:54.419405  1170 net.cpp:406] Sigmoid19 <- Eltwise27_Eltwise27_0_split_0
+I1025 10:22:54.419411  1170 net.cpp:380] Sigmoid19 -> Sigmoid19
+I1025 10:22:54.419627  1170 net.cpp:122] Setting up Sigmoid19
+I1025 10:22:54.419641  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419646  1170 net.cpp:137] Memory required for data: 838337024
+I1025 10:22:54.419651  1170 layer_factory.hpp:77] Creating layer Eltwise28
+I1025 10:22:54.419661  1170 net.cpp:84] Creating Layer Eltwise28
+I1025 10:22:54.419667  1170 net.cpp:406] Eltwise28 <- Eltwise27_Eltwise27_0_split_1
+I1025 10:22:54.419672  1170 net.cpp:406] Eltwise28 <- Sigmoid19
+I1025 10:22:54.419682  1170 net.cpp:380] Eltwise28 -> Eltwise28
+I1025 10:22:54.419711  1170 net.cpp:122] Setting up Eltwise28
+I1025 10:22:54.419719  1170 net.cpp:129] Top shape: 128 64 8 8 (524288)
+I1025 10:22:54.419724  1170 net.cpp:137] Memory required for data: 840434176
+I1025 10:22:54.419728  1170 layer_factory.hpp:77] Creating layer Pooling1
+I1025 10:22:54.419740  1170 net.cpp:84] Creating Layer Pooling1
+I1025 10:22:54.419746  1170 net.cpp:406] Pooling1 <- Eltwise28
+I1025 10:22:54.419754  1170 net.cpp:380] Pooling1 -> Pooling1
+I1025 10:22:54.420696  1170 net.cpp:122] Setting up Pooling1
+I1025 10:22:54.420713  1170 net.cpp:129] Top shape: 128 64 1 1 (8192)
+I1025 10:22:54.420719  1170 net.cpp:137] Memory required for data: 840466944
+I1025 10:22:54.420724  1170 layer_factory.hpp:77] Creating layer InnerProduct1
+I1025 10:22:54.420737  1170 net.cpp:84] Creating Layer InnerProduct1
+I1025 10:22:54.420742  1170 net.cpp:406] InnerProduct1 <- Pooling1
+I1025 10:22:54.420753  1170 net.cpp:380] InnerProduct1 -> InnerProduct1
+I1025 10:22:54.420907  1170 net.cpp:122] Setting up InnerProduct1
+I1025 10:22:54.420918  1170 net.cpp:129] Top shape: 128 10 (1280)
+I1025 10:22:54.420922  1170 net.cpp:137] Memory required for data: 840472064
+I1025 10:22:54.420930  1170 layer_factory.hpp:77] Creating layer Accuracy1
+I1025 10:22:54.420938  1170 net.cpp:84] Creating Layer Accuracy1
+I1025 10:22:54.420948  1170 net.cpp:406] Accuracy1 <- InnerProduct1
+I1025 10:22:54.420954  1170 net.cpp:406] Accuracy1 <- Data2
+I1025 10:22:54.420961  1170 net.cpp:380] Accuracy1 -> Accuracy1
+I1025 10:22:54.420994  1170 net.cpp:122] Setting up Accuracy1
+I1025 10:22:54.421003  1170 net.cpp:129] Top shape: (1)
+I1025 10:22:54.421013  1170 net.cpp:137] Memory required for data: 840472068
+I1025 10:22:54.421025  1170 net.cpp:200] Accuracy1 does not need backward computation.
+I1025 10:22:54.421031  1170 net.cpp:200] InnerProduct1 does not need backward computation.
+I1025 10:22:54.421036  1170 net.cpp:200] Pooling1 does not need backward computation.
+I1025 10:22:54.421041  1170 net.cpp:200] Eltwise28 does not need backward computation.
+I1025 10:22:54.421046  1170 net.cpp:200] Sigmoid19 does not need backward computation.
+I1025 10:22:54.421051  1170 net.cpp:200] Eltwise27_Eltwise27_0_split does not need backward computation.
+I1025 10:22:54.421056  1170 net.cpp:200] Eltwise27 does not need backward computation.
+I1025 10:22:54.421061  1170 net.cpp:200] Scale21 does not need backward computation.
+I1025 10:22:54.421066  1170 net.cpp:200] BatchNorm21 does not need backward computation.
+I1025 10:22:54.421069  1170 net.cpp:200] Convolution21 does not need backward computation.
+I1025 10:22:54.421074  1170 net.cpp:200] Eltwise26 does not need backward computation.
+I1025 10:22:54.421079  1170 net.cpp:200] Sigmoid18 does not need backward computation.
+I1025 10:22:54.421085  1170 net.cpp:200] Convolution20_Scale20_0_split does not need backward computation.
+I1025 10:22:54.421090  1170 net.cpp:200] Scale20 does not need backward computation.
+I1025 10:22:54.421095  1170 net.cpp:200] BatchNorm20 does not need backward computation.
+I1025 10:22:54.421099  1170 net.cpp:200] Convolution20 does not need backward computation.
+I1025 10:22:54.421105  1170 net.cpp:200] Eltwise25_Eltwise25_0_split does not need backward computation.
+I1025 10:22:54.421110  1170 net.cpp:200] Eltwise25 does not need backward computation.
+I1025 10:22:54.421115  1170 net.cpp:200] Sigmoid17 does not need backward computation.
+I1025 10:22:54.421120  1170 net.cpp:200] Eltwise24_Eltwise24_0_split does not need backward computation.
+I1025 10:22:54.421125  1170 net.cpp:200] Eltwise24 does not need backward computation.
+I1025 10:22:54.421131  1170 net.cpp:200] Scale19 does not need backward computation.
+I1025 10:22:54.421136  1170 net.cpp:200] BatchNorm19 does not need backward computation.
+I1025 10:22:54.421140  1170 net.cpp:200] Convolution19 does not need backward computation.
+I1025 10:22:54.421146  1170 net.cpp:200] Eltwise23 does not need backward computation.
+I1025 10:22:54.421151  1170 net.cpp:200] Sigmoid16 does not need backward computation.
+I1025 10:22:54.421157  1170 net.cpp:200] Convolution18_Scale18_0_split does not need backward computation.
+I1025 10:22:54.421162  1170 net.cpp:200] Scale18 does not need backward computation.
+I1025 10:22:54.421166  1170 net.cpp:200] BatchNorm18 does not need backward computation.
+I1025 10:22:54.421171  1170 net.cpp:200] Convolution18 does not need backward computation.
+I1025 10:22:54.421176  1170 net.cpp:200] Eltwise22_Eltwise22_0_split does not need backward computation.
+I1025 10:22:54.421181  1170 net.cpp:200] Eltwise22 does not need backward computation.
+I1025 10:22:54.421186  1170 net.cpp:200] Sigmoid15 does not need backward computation.
+I1025 10:22:54.421192  1170 net.cpp:200] Eltwise21_Eltwise21_0_split does not need backward computation.
+I1025 10:22:54.421196  1170 net.cpp:200] Eltwise21 does not need backward computation.
+I1025 10:22:54.421202  1170 net.cpp:200] Scale17 does not need backward computation.
+I1025 10:22:54.421207  1170 net.cpp:200] BatchNorm17 does not need backward computation.
+I1025 10:22:54.421212  1170 net.cpp:200] Convolution17 does not need backward computation.
+I1025 10:22:54.421217  1170 net.cpp:200] Scale16 does not need backward computation.
+I1025 10:22:54.421222  1170 net.cpp:200] BatchNorm16 does not need backward computation.
+I1025 10:22:54.421226  1170 net.cpp:200] Convolution16 does not need backward computation.
+I1025 10:22:54.421231  1170 net.cpp:200] Eltwise20 does not need backward computation.
+I1025 10:22:54.421237  1170 net.cpp:200] Sigmoid14 does not need backward computation.
+I1025 10:22:54.421242  1170 net.cpp:200] Convolution15_Scale15_0_split does not need backward computation.
+I1025 10:22:54.421252  1170 net.cpp:200] Scale15 does not need backward computation.
+I1025 10:22:54.421263  1170 net.cpp:200] BatchNorm15 does not need backward computation.
+I1025 10:22:54.421268  1170 net.cpp:200] Convolution15 does not need backward computation.
+I1025 10:22:54.421273  1170 net.cpp:200] Eltwise19_Eltwise19_0_split does not need backward computation.
+I1025 10:22:54.421278  1170 net.cpp:200] Eltwise19 does not need backward computation.
+I1025 10:22:54.421284  1170 net.cpp:200] Sigmoid13 does not need backward computation.
+I1025 10:22:54.421289  1170 net.cpp:200] Eltwise18_Eltwise18_0_split does not need backward computation.
+I1025 10:22:54.421294  1170 net.cpp:200] Eltwise18 does not need backward computation.
+I1025 10:22:54.421304  1170 net.cpp:200] Scale14 does not need backward computation.
+I1025 10:22:54.421309  1170 net.cpp:200] BatchNorm14 does not need backward computation.
+I1025 10:22:54.421314  1170 net.cpp:200] Convolution14 does not need backward computation.
+I1025 10:22:54.421319  1170 net.cpp:200] Eltwise17 does not need backward computation.
+I1025 10:22:54.421325  1170 net.cpp:200] Sigmoid12 does not need backward computation.
+I1025 10:22:54.421330  1170 net.cpp:200] Convolution13_Scale13_0_split does not need backward computation.
+I1025 10:22:54.421334  1170 net.cpp:200] Scale13 does not need backward computation.
+I1025 10:22:54.421339  1170 net.cpp:200] BatchNorm13 does not need backward computation.
+I1025 10:22:54.421344  1170 net.cpp:200] Convolution13 does not need backward computation.
+I1025 10:22:54.421350  1170 net.cpp:200] Eltwise16_Eltwise16_0_split does not need backward computation.
+I1025 10:22:54.421355  1170 net.cpp:200] Eltwise16 does not need backward computation.
+I1025 10:22:54.421360  1170 net.cpp:200] Sigmoid11 does not need backward computation.
+I1025 10:22:54.421365  1170 net.cpp:200] Eltwise15_Eltwise15_0_split does not need backward computation.
+I1025 10:22:54.421370  1170 net.cpp:200] Eltwise15 does not need backward computation.
+I1025 10:22:54.421375  1170 net.cpp:200] Scale12 does not need backward computation.
+I1025 10:22:54.421380  1170 net.cpp:200] BatchNorm12 does not need backward computation.
+I1025 10:22:54.421385  1170 net.cpp:200] Convolution12 does not need backward computation.
+I1025 10:22:54.421389  1170 net.cpp:200] Eltwise14 does not need backward computation.
+I1025 10:22:54.421396  1170 net.cpp:200] Sigmoid10 does not need backward computation.
+I1025 10:22:54.421401  1170 net.cpp:200] Convolution11_Scale11_0_split does not need backward computation.
+I1025 10:22:54.421406  1170 net.cpp:200] Scale11 does not need backward computation.
+I1025 10:22:54.421411  1170 net.cpp:200] BatchNorm11 does not need backward computation.
+I1025 10:22:54.421414  1170 net.cpp:200] Convolution11 does not need backward computation.
+I1025 10:22:54.421419  1170 net.cpp:200] Eltwise13_Eltwise13_0_split does not need backward computation.
+I1025 10:22:54.421424  1170 net.cpp:200] Eltwise13 does not need backward computation.
+I1025 10:22:54.421430  1170 net.cpp:200] Sigmoid9 does not need backward computation.
+I1025 10:22:54.421435  1170 net.cpp:200] Eltwise12_Eltwise12_0_split does not need backward computation.
+I1025 10:22:54.421439  1170 net.cpp:200] Eltwise12 does not need backward computation.
+I1025 10:22:54.421445  1170 net.cpp:200] Scale10 does not need backward computation.
+I1025 10:22:54.421450  1170 net.cpp:200] BatchNorm10 does not need backward computation.
+I1025 10:22:54.421454  1170 net.cpp:200] Convolution10 does not need backward computation.
+I1025 10:22:54.421460  1170 net.cpp:200] Scale9 does not need backward computation.
+I1025 10:22:54.421465  1170 net.cpp:200] BatchNorm9 does not need backward computation.
+I1025 10:22:54.421469  1170 net.cpp:200] Convolution9 does not need backward computation.
+I1025 10:22:54.421474  1170 net.cpp:200] Eltwise11 does not need backward computation.
+I1025 10:22:54.421480  1170 net.cpp:200] Sigmoid8 does not need backward computation.
+I1025 10:22:54.421485  1170 net.cpp:200] Convolution8_Scale8_0_split does not need backward computation.
+I1025 10:22:54.421495  1170 net.cpp:200] Scale8 does not need backward computation.
+I1025 10:22:54.421505  1170 net.cpp:200] BatchNorm8 does not need backward computation.
+I1025 10:22:54.421510  1170 net.cpp:200] Convolution8 does not need backward computation.
+I1025 10:22:54.421515  1170 net.cpp:200] Eltwise10_Eltwise10_0_split does not need backward computation.
+I1025 10:22:54.421524  1170 net.cpp:200] Eltwise10 does not need backward computation.
+I1025 10:22:54.421530  1170 net.cpp:200] Sigmoid7 does not need backward computation.
+I1025 10:22:54.421535  1170 net.cpp:200] Eltwise9_Eltwise9_0_split does not need backward computation.
+I1025 10:22:54.421540  1170 net.cpp:200] Eltwise9 does not need backward computation.
+I1025 10:22:54.421545  1170 net.cpp:200] Scale7 does not need backward computation.
+I1025 10:22:54.421550  1170 net.cpp:200] BatchNorm7 does not need backward computation.
+I1025 10:22:54.421555  1170 net.cpp:200] Convolution7 does not need backward computation.
+I1025 10:22:54.421560  1170 net.cpp:200] Eltwise8 does not need backward computation.
+I1025 10:22:54.421566  1170 net.cpp:200] Sigmoid6 does not need backward computation.
+I1025 10:22:54.421571  1170 net.cpp:200] Convolution6_Scale6_0_split does not need backward computation.
+I1025 10:22:54.421576  1170 net.cpp:200] Scale6 does not need backward computation.
+I1025 10:22:54.421581  1170 net.cpp:200] BatchNorm6 does not need backward computation.
+I1025 10:22:54.421586  1170 net.cpp:200] Convolution6 does not need backward computation.
+I1025 10:22:54.421591  1170 net.cpp:200] Eltwise7_Eltwise7_0_split does not need backward computation.
+I1025 10:22:54.421596  1170 net.cpp:200] Eltwise7 does not need backward computation.
+I1025 10:22:54.421600  1170 net.cpp:200] Sigmoid5 does not need backward computation.
+I1025 10:22:54.421605  1170 net.cpp:200] Eltwise6_Eltwise6_0_split does not need backward computation.
+I1025 10:22:54.421612  1170 net.cpp:200] Eltwise6 does not need backward computation.
+I1025 10:22:54.421617  1170 net.cpp:200] Scale5 does not need backward computation.
+I1025 10:22:54.421622  1170 net.cpp:200] BatchNorm5 does not need backward computation.
+I1025 10:22:54.421625  1170 net.cpp:200] Convolution5 does not need backward computation.
+I1025 10:22:54.421630  1170 net.cpp:200] Eltwise5 does not need backward computation.
+I1025 10:22:54.421636  1170 net.cpp:200] Sigmoid4 does not need backward computation.
+I1025 10:22:54.421641  1170 net.cpp:200] Convolution4_Scale4_0_split does not need backward computation.
+I1025 10:22:54.421646  1170 net.cpp:200] Scale4 does not need backward computation.
+I1025 10:22:54.421651  1170 net.cpp:200] BatchNorm4 does not need backward computation.
+I1025 10:22:54.421655  1170 net.cpp:200] Convolution4 does not need backward computation.
+I1025 10:22:54.421660  1170 net.cpp:200] Eltwise4_Eltwise4_0_split does not need backward computation.
+I1025 10:22:54.421665  1170 net.cpp:200] Eltwise4 does not need backward computation.
+I1025 10:22:54.421671  1170 net.cpp:200] Sigmoid3 does not need backward computation.
+I1025 10:22:54.421676  1170 net.cpp:200] Eltwise3_Eltwise3_0_split does not need backward computation.
+I1025 10:22:54.421681  1170 net.cpp:200] Eltwise3 does not need backward computation.
+I1025 10:22:54.421686  1170 net.cpp:200] Scale3 does not need backward computation.
+I1025 10:22:54.421691  1170 net.cpp:200] BatchNorm3 does not need backward computation.
+I1025 10:22:54.421696  1170 net.cpp:200] Convolution3 does not need backward computation.
+I1025 10:22:54.421701  1170 net.cpp:200] Eltwise2 does not need backward computation.
+I1025 10:22:54.421706  1170 net.cpp:200] Sigmoid2 does not need backward computation.
+I1025 10:22:54.421711  1170 net.cpp:200] Convolution2_Scale2_0_split does not need backward computation.
+I1025 10:22:54.421716  1170 net.cpp:200] Scale2 does not need backward computation.
+I1025 10:22:54.421721  1170 net.cpp:200] BatchNorm2 does not need backward computation.
+I1025 10:22:54.421725  1170 net.cpp:200] Convolution2 does not need backward computation.
+I1025 10:22:54.421731  1170 net.cpp:200] Eltwise1_Eltwise1_0_split does not need backward computation.
+I1025 10:22:54.421744  1170 net.cpp:200] Eltwise1 does not need backward computation.
+I1025 10:22:54.421753  1170 net.cpp:200] Sigmoid1 does not need backward computation.
+I1025 10:22:54.421763  1170 net.cpp:200] Convolution1_Scale1_0_split does not need backward computation.
+I1025 10:22:54.421772  1170 net.cpp:200] Scale1 does not need backward computation.
+I1025 10:22:54.421782  1170 net.cpp:200] BatchNorm1 does not need backward computation.
+I1025 10:22:54.421790  1170 net.cpp:200] Convolution1 does not need backward computation.
+I1025 10:22:54.421799  1170 net.cpp:200] Data1 does not need backward computation.
+I1025 10:22:54.421808  1170 net.cpp:242] This network produces output Accuracy1
+I1025 10:22:54.421900  1170 net.cpp:255] Network initialization done.
+I1025 10:22:54.424181  1170 upgrade_proto.cpp:77] Attempting to upgrade batch norm layers using deprecated params: ./snapshot/_iter_88000.caffemodel
+I1025 10:22:54.424206  1170 upgrade_proto.cpp:80] Successfully upgraded batch norm layers using deprecated params.
+I1025 10:22:54.424213  1170 net.cpp:744] Ignoring source layer Data2_Data1_1_split
+I1025 10:22:54.424510  1170 net.cpp:744] Ignoring source layer InnerProduct1_InnerProduct1_0_split
+I1025 10:22:54.424518  1170 net.cpp:744] Ignoring source layer SoftmaxWithLoss1
+I1025 10:22:54.424666  1170 caffe.cpp:290] Running for 50 iterations.
+I1025 10:22:54.576068  1170 caffe.cpp:313] Batch 0, Accuracy1 = 0.898438
+I1025 10:22:54.627884  1170 caffe.cpp:313] Batch 1, Accuracy1 = 0.929688
+I1025 10:22:54.679958  1170 caffe.cpp:313] Batch 2, Accuracy1 = 0.890625
+I1025 10:22:54.729365  1170 caffe.cpp:313] Batch 3, Accuracy1 = 0.890625
+I1025 10:22:54.774478  1170 caffe.cpp:313] Batch 4, Accuracy1 = 0.914062
+I1025 10:22:54.819463  1170 caffe.cpp:313] Batch 5, Accuracy1 = 0.90625
+I1025 10:22:54.864351  1170 caffe.cpp:313] Batch 6, Accuracy1 = 0.929688
+I1025 10:22:54.907402  1170 caffe.cpp:313] Batch 7, Accuracy1 = 0.914062
+I1025 10:22:54.951164  1170 caffe.cpp:313] Batch 8, Accuracy1 = 0.882812
+I1025 10:22:54.993239  1170 caffe.cpp:313] Batch 9, Accuracy1 = 0.96875
+I1025 10:22:55.035187  1170 caffe.cpp:313] Batch 10, Accuracy1 = 0.9375
+I1025 10:22:55.075412  1170 caffe.cpp:313] Batch 11, Accuracy1 = 0.960938
+I1025 10:22:55.114935  1170 caffe.cpp:313] Batch 12, Accuracy1 = 0.921875
+I1025 10:22:55.154388  1170 caffe.cpp:313] Batch 13, Accuracy1 = 0.882812
+I1025 10:22:55.193820  1170 caffe.cpp:313] Batch 14, Accuracy1 = 0.90625
+I1025 10:22:55.232504  1170 caffe.cpp:313] Batch 15, Accuracy1 = 0.90625
+I1025 10:22:55.269925  1170 caffe.cpp:313] Batch 16, Accuracy1 = 0.914062
+I1025 10:22:55.307466  1170 caffe.cpp:313] Batch 17, Accuracy1 = 0.914062
+I1025 10:22:55.344938  1170 caffe.cpp:313] Batch 18, Accuracy1 = 0.929688
+I1025 10:22:55.382459  1170 caffe.cpp:313] Batch 19, Accuracy1 = 0.9375
+I1025 10:22:55.419844  1170 caffe.cpp:313] Batch 20, Accuracy1 = 0.875
+I1025 10:22:55.457183  1170 caffe.cpp:313] Batch 21, Accuracy1 = 0.921875
+I1025 10:22:55.494432  1170 caffe.cpp:313] Batch 22, Accuracy1 = 0.953125
+I1025 10:22:55.531613  1170 caffe.cpp:313] Batch 23, Accuracy1 = 0.921875
+I1025 10:22:55.569033  1170 caffe.cpp:313] Batch 24, Accuracy1 = 0.914062
+I1025 10:22:55.606230  1170 caffe.cpp:313] Batch 25, Accuracy1 = 0.90625
+I1025 10:22:55.643383  1170 caffe.cpp:313] Batch 26, Accuracy1 = 0.960938
+I1025 10:22:55.680510  1170 caffe.cpp:313] Batch 27, Accuracy1 = 0.890625
+I1025 10:22:55.717603  1170 caffe.cpp:313] Batch 28, Accuracy1 = 0.90625
+I1025 10:22:55.754838  1170 caffe.cpp:313] Batch 29, Accuracy1 = 0.929688
+I1025 10:22:55.791946  1170 caffe.cpp:313] Batch 30, Accuracy1 = 0.914062
+I1025 10:22:55.829206  1170 caffe.cpp:313] Batch 31, Accuracy1 = 0.929688
+I1025 10:22:55.865373  1170 caffe.cpp:313] Batch 32, Accuracy1 = 0.9375
+I1025 10:22:55.902515  1170 caffe.cpp:313] Batch 33, Accuracy1 = 0.921875
+I1025 10:22:55.940666  1170 caffe.cpp:313] Batch 34, Accuracy1 = 0.921875
+I1025 10:22:55.980103  1170 caffe.cpp:313] Batch 35, Accuracy1 = 0.914062
+I1025 10:22:56.019623  1170 caffe.cpp:313] Batch 36, Accuracy1 = 0.867188
+I1025 10:22:56.056666  1170 caffe.cpp:313] Batch 37, Accuracy1 = 0.90625
+I1025 10:22:56.097043  1170 caffe.cpp:313] Batch 38, Accuracy1 = 0.953125
+I1025 10:22:56.134166  1170 caffe.cpp:313] Batch 39, Accuracy1 = 0.929688
+I1025 10:22:56.171192  1170 caffe.cpp:313] Batch 40, Accuracy1 = 0.9375
+I1025 10:22:56.208247  1170 caffe.cpp:313] Batch 41, Accuracy1 = 0.929688
+I1025 10:22:56.245489  1170 caffe.cpp:313] Batch 42, Accuracy1 = 0.914062
+I1025 10:22:56.282579  1170 caffe.cpp:313] Batch 43, Accuracy1 = 0.929688
+I1025 10:22:56.322674  1170 caffe.cpp:313] Batch 44, Accuracy1 = 0.953125
+I1025 10:22:56.359776  1170 caffe.cpp:313] Batch 45, Accuracy1 = 0.921875
+I1025 10:22:56.396764  1170 caffe.cpp:313] Batch 46, Accuracy1 = 0.921875
+I1025 10:22:56.433740  1170 caffe.cpp:313] Batch 47, Accuracy1 = 0.898438
+I1025 10:22:56.470794  1170 caffe.cpp:313] Batch 48, Accuracy1 = 0.9375
+I1025 10:22:56.507743  1170 caffe.cpp:313] Batch 49, Accuracy1 = 0.960938
+I1025 10:22:56.507766  1170 caffe.cpp:318] Loss: 0
+I1025 10:22:56.507793  1170 caffe.cpp:330] Accuracy1 = 0.920313

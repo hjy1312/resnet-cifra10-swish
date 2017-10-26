@@ -1,0 +1,6 @@
+import numpy as np
+a = ' my name dd ss dsa'
+print a[-3:]
+b = np.array([2,5,1,7,3])
+c = np.argsort(b)
+print b
